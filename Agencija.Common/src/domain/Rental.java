@@ -12,15 +12,15 @@ import java.util.Date;
  *
  * @author Andrej
  */
-public class Renting implements Serializable{
+public class Rental implements Serializable{
     private Employee employee;
     private Listing listing;
     private Date rentingDate;
 
-    public Renting() {
+    public Rental() {
     }
 
-    public Renting(Employee employee, Listing listing, Date rentingDate) {
+    public Rental(Employee employee, Listing listing, Date rentingDate) {
         this.employee = employee;
         this.listing = listing;
         this.rentingDate = rentingDate;

@@ -14,24 +14,24 @@ import java.util.ArrayList;
  */
 public class Employee implements Serializable{
    private long employeeID;
-   private String name;
+   private String firstName;
    private String lastName;
    private String role;
    private String username;
    private String password;
-   private ArrayList<Renting> rentings;
+   private ArrayList<Rental> rentals;
 
     public Employee() {
     }
 
-    public Employee(long employeeID, String name, String lastName, String role, String username, String password, ArrayList<Renting> rentings) {
+    public Employee(long employeeID, String name, String lastName, String role, String username, String password, ArrayList<Rental> rentals) {
         this.employeeID = employeeID;
-        this.name = name;
+        this.firstName = name;
         this.lastName = lastName;
         this.role = role;
         this.username = username;
         this.password = password;
-        this.rentings = rentings;
+        this.rentals = rentals;
     }
 
     
@@ -51,12 +51,12 @@ public class Employee implements Serializable{
         this.employeeID = employeeID;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -83,12 +83,12 @@ public class Employee implements Serializable{
         this.username = username;
     }
 
-    public ArrayList<Renting> getRentings() {
-        return rentings;
+    public ArrayList<Rental> getRentals() {
+        return rentals;
     }
 
-    public void setRentings(ArrayList<Renting> rentings) {
-        this.rentings = rentings;
+    public void setRentals(ArrayList<Rental> rentals) {
+        this.rentals = rentals;
     }
    
 }

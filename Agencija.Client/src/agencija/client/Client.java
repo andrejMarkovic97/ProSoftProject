@@ -5,6 +5,8 @@
  */
 package agencija.client;
 
+import client.communication.Communication;
+import forms.FrmLogin;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -20,15 +22,19 @@ public class Client {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        /*
+        Client client = new Client();
         try {
-            Socket socket = new Socket("127.0.0.1", 9000);
-            System.out.println("Client connected");
+            client.connect();
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
+     
     }
-         */
-        Client client = new Client();
+
+    private void connect() throws IOException {
+        Socket socket = new Socket("127.0.0.1", 9000);
+        System.out.println("Client has connected");
+        Communication.getInstance().setSocket(socket);
+        new FrmLogin().setVisible(true);
     }
 }
