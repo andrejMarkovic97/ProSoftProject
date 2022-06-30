@@ -19,8 +19,8 @@ public class Communication {
     private static Communication instance;
     private Socket socket;
     private Communication(){
-        
-    }
+    
+}
     
     public static Communication getInstance(){
         if(instance == null) {

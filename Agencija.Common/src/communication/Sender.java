@@ -9,8 +9,6 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -18,10 +16,10 @@ import java.util.logging.Logger;
  */
 public class Sender {
     private Socket socket;
-
+    
     public Sender(Socket socket) {
         this.socket = socket;
-    }
+}
     
     public void send(Object object) throws Exception {
         try {

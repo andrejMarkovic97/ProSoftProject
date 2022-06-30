@@ -5,16 +5,21 @@
  */
 package repository.db.impl;
 
-import database.DbRepository;
 import domain.Listing;
+import java.sql.Connection;
 import java.util.List;
+import repository.db.DBRepository;
 
 /**
  *
  * @author Andrej
  */
-public class RepositoryListing implements DbRepository<Listing, Long>{
+public class RepositoryListing implements DBRepository<Listing, Long>{
+  private Connection connection;
 
+    public RepositoryListing() {
+    }
+  
     @Override
     public List<Listing> getAll() throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -39,6 +44,5 @@ public class RepositoryListing implements DbRepository<Listing, Long>{
     public Listing getById(Long k) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-      
     
 }

@@ -5,13 +5,9 @@
  */
 package client.view;
 
-import client.communication.Communication;
-import client.controller.Controller;
-import communication.Operations;
-import communication.Request;
-import communication.Response;
-import communication.ResponseType;
+import client.controller.ClientController;
 import domain.Employee;
+import java.net.SocketException;
 
 import javax.swing.JOptionPane;
 
@@ -111,23 +107,35 @@ public class FrmLogin extends javax.swing.JFrame {
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
         try {
-            //validateForm();
-            Employee employee = Controller.getInstance().login(txtUsername.getText(), String.valueOf(txtPassword.getPassword()));
-            
-            JOptionPane.showMessageDialog(this, "Welcome " + employee.getFirstName() + " " + employee.getLastName());
-            this.dispose();
-            Controller.getInstance().setCurrentEmployee(employee);
-            new FrmMain().setVisible(true);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Login Error", JOptionPane.ERROR_MESSAGE);
+            if (!txtUsername.getText().equals("") || !String.valueOf(txtPassword.getPassword()).equals("")) {
+                Employee e = new Employee();
+                e.setUsername(txtUsername.getText().trim());
+                e.setPassword(String.valueOf(txtPassword.getPassword()));
 
+                Employee employee = ClientController.getInstance().login(e);
+
+//                 JOptionPane.showMessageDialog(this, "Welcome " + employee.getFirstName() + " " + employee.getLastName());
+                ClientController.getInstance().setCurrentEmployee(employee);
+                new FrmMain().setVisible(true);
+                this.dispose();
+            }
+            else{
+                JOptionPane.showMessageDialog(this,"Please enter your credentials","Invalid credentials", ERROR);
+            }
+
+        } catch (Exception ex) {
+            if (ex instanceof SocketException) {
+                JOptionPane.showMessageDialog(this, ex, "Communication with the server has been disrupted", ERROR);
+                this.dispose();
+
+            } else {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Login Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
+
     }//GEN-LAST:event_btnSubmitActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSubmit;
@@ -137,4 +145,5 @@ public class FrmLogin extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
+
 }

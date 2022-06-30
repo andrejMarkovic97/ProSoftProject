@@ -11,8 +11,8 @@ import java.util.List;
  *
  * @author Andrej
  */
-public interface Repository<T, K> {
-   
+public interface Repository <T, K> {
+    
     
     List<T> getAll() throws Exception;
     void add(T t) throws Exception;

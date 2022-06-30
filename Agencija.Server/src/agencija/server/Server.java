@@ -6,12 +6,10 @@
 package agencija.server;
 
 import communication.Operations;
-import communication.Reciever;
 import communication.Request;
 import communication.Response;
 import communication.ResponseType;
-import communication.Sender;
-import controller.Controller;
+import controller.ServerController;
 import domain.Employee;
 import java.io.BufferedOutputStream;
 import java.io.IOException;

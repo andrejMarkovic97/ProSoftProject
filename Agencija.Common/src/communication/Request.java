@@ -28,5 +28,14 @@ public class Request implements Serializable{
     public Object getArgument() {
         return argument;
     }
+
+    public void setOperation(int operation) {
+        this.operation = operation;
+    }
+
+    public void setArgument(Object argument) {
+        this.argument = argument;
+    }
+    
     
 }

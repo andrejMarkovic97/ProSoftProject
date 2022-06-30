@@ -36,6 +36,21 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Configuration"/>
           </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="miDatabaseConfig">
+              <Properties>
+                <Property name="text" type="java.lang.String" value=" Database configuration"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miDatabaseConfigActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="miServerConfig">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Server configuration"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
         </Menu>
       </SubComponents>
     </Menu>

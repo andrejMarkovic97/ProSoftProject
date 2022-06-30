@@ -5,16 +5,21 @@
  */
 package repository.db.impl;
 
-import database.DbRepository;
 import domain.Rental;
+import java.sql.Connection;
 import java.util.List;
+import repository.db.DBRepository;
 
 /**
  *
  * @author Andrej
  */
-public class RepositoryRental implements DbRepository<Rental, Long>{
+public class RepositoryRental implements DBRepository<Rental, Long>{
+  private Connection connection;
 
+    public RepositoryRental() {
+    }
+  
     @Override
     public List<Rental> getAll() throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

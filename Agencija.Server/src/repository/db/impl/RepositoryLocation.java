@@ -5,16 +5,21 @@
  */
 package repository.db.impl;
 
-import database.DbRepository;
 import domain.Location;
+import java.sql.Connection;
 import java.util.List;
+import repository.db.DBRepository;
 
 /**
  *
  * @author Andrej
  */
-public class RepositoryLocation implements DbRepository<Location, Long>{
+public class RepositoryLocation implements DBRepository<Location, Long>{
+  private Connection connection;
 
+    public RepositoryLocation() {
+    }
+  
     @Override
     public List<Location> getAll() throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

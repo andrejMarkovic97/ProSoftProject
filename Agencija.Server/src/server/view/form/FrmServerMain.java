@@ -43,6 +43,8 @@ public class FrmServerMain extends javax.swing.JFrame {
         miStopServer = new javax.swing.JMenuItem();
         miClients = new javax.swing.JMenuItem();
         jMenuConfig = new javax.swing.JMenu();
+        miDatabaseConfig = new javax.swing.JMenuItem();
+        miServerConfig = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,6 +83,18 @@ public class FrmServerMain extends javax.swing.JFrame {
         menuServer.add(jMenuServer);
 
         jMenuConfig.setText("Configuration");
+
+        miDatabaseConfig.setText(" Database configuration");
+        miDatabaseConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miDatabaseConfigActionPerformed(evt);
+            }
+        });
+        jMenuConfig.add(miDatabaseConfig);
+
+        miServerConfig.setText("Server configuration");
+        jMenuConfig.add(miServerConfig);
+
         menuServer.add(jMenuConfig);
 
         setJMenuBar(menuServer);
@@ -124,6 +138,10 @@ public class FrmServerMain extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_miStopServerActionPerformed
 
+    private void miDatabaseConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDatabaseConfigActionPerformed
+        
+    }//GEN-LAST:event_miDatabaseConfigActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -166,6 +184,8 @@ public class FrmServerMain extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JMenuBar menuServer;
     private javax.swing.JMenuItem miClients;
+    private javax.swing.JMenuItem miDatabaseConfig;
+    private javax.swing.JMenuItem miServerConfig;
     private javax.swing.JMenuItem miStartServer;
     private javax.swing.JMenuItem miStopServer;
     // End of variables declaration//GEN-END:variables

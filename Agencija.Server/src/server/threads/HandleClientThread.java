@@ -6,13 +6,15 @@
 package server.threads;
 
 import communication.Operations;
-import communication.Reciever;
+
 import communication.Request;
 import communication.Response;
 import communication.ResponseType;
-import communication.Sender;
-import controller.Controller;
+
+import controller.ServerController;
 import domain.Employee;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,26 +33,26 @@ public class HandleClientThread extends Thread {
 
     @Override
     public void run() {
-        while (!socket.isClosed()) {
-            Request request;
-            try {
-                request = (Request) new Reciever(socket).recieve();
+        try {
+            while (!isInterrupted()) {
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                Request request = (Request) in.readObject();
                 Response response = handleRequest(request);
-                new Sender(socket).send(response);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject(response);
             }
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private Response handleRequest(Request request) {
+    private Response handleRequest(Request request) throws Exception {
         switch (request.getOperation()) {
             case Operations.LOGIN:
                 return login(request);
-            default:
-                return null;
+
         }
+        return null;
     }
 
     public Socket getSocket() {
@@ -60,13 +62,22 @@ public class HandleClientThread extends Thread {
     private Response login(Request request) {
         Response response = new Response();
         Employee requestEmployee = (Employee) request.getArgument();
-
-        Employee employee = Controller.getInstance().login(requestEmployee.getUsername(), requestEmployee.getPassword());
-
-        System.out.println("Successful login!");
-        response.setResponseType(ResponseType.SUCCESS);
-        response.setResult(employee);
-
+        try {
+            
+            Employee employee = ServerController.getInstance().login(requestEmployee);
+            if(employee!=null){
+            System.out.println("Successful login!");
+            response.setResponseType(ResponseType.SUCCESS);
+            response.setResult(employee);
+            }
+            else{
+                throw new Exception("Credentials don't match any employees!");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setResponseType(ResponseType.ERROR);
+            response.setException(ex);
+        }
         return response;
     }
 }

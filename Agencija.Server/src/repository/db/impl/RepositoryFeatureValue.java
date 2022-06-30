@@ -5,16 +5,21 @@
  */
 package repository.db.impl;
 
-import database.DbRepository;
 import domain.FeatureValue;
+import java.sql.Connection;
 import java.util.List;
+import repository.db.DBRepository;
 
 /**
  *
  * @author Andrej
  */
-public class RepositoryFeatureValue implements DbRepository<FeatureValue, Long>{
+public class RepositoryFeatureValue implements DBRepository<FeatureValue, Long>{
+  private Connection connection;
 
+    public RepositoryFeatureValue() {
+    }
+  
     @Override
     public List<FeatureValue> getAll() throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
