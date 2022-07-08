@@ -9,6 +9,7 @@ import communication.Reciever;
 import communication.Request;
 import communication.Response;
 import communication.Sender;
+import domain.Employee;
 import java.net.Socket;
 
 /**
@@ -39,4 +40,12 @@ public class Communication {
         System.out.println("Login request has been sent");
         return (Response) new Reciever(socket).recieve();
     }
+
+    public Response addEmployee(Request request) throws Exception {
+        new Sender(socket).send(request);
+        System.out.println("Add employee request has been sent");
+        return (Response) new Reciever(socket).recieve();
+    }
+
+   
 }

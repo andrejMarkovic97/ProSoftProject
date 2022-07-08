@@ -16,21 +16,19 @@ import domain.Employee;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Andrej
  */
 public class HandleClientThread extends Thread {
-
-    private Socket socket;
-
+    
+    private final Socket socket;
+    
     public HandleClientThread(Socket socket) {
         this.socket = socket;
     }
-
+    
     @Override
     public void run() {
         try {
@@ -45,32 +43,33 @@ public class HandleClientThread extends Thread {
             e.printStackTrace();
         }
     }
-
+    
     private Response handleRequest(Request request) throws Exception {
         switch (request.getOperation()) {
             case Operations.LOGIN:
                 return login(request);
-
+            case Operations.ADD_EMPLOYEE:
+                return addEmployee(request);
+            
         }
         return null;
     }
-
+    
     public Socket getSocket() {
         return socket;
     }
-
+    
     private Response login(Request request) {
         Response response = new Response();
         Employee requestEmployee = (Employee) request.getArgument();
         try {
             
             Employee employee = ServerController.getInstance().login(requestEmployee);
-            if(employee!=null){
-            System.out.println("Successful login!");
-            response.setResponseType(ResponseType.SUCCESS);
-            response.setResult(employee);
-            }
-            else{
+            if (employee != null) {
+                System.out.println("Successful login!");
+                response.setResponseType(ResponseType.SUCCESS);
+                response.setResult(employee);
+            } else {
                 throw new Exception("Credentials don't match any employees!");
             }
         } catch (Exception ex) {
@@ -80,4 +79,20 @@ public class HandleClientThread extends Thread {
         }
         return response;
     }
+    
+    private Response addEmployee(Request request) {
+        Response response = new Response();
+        Employee employee = (Employee) request.getArgument();
+        try {
+            ServerController.getInstance().addEmployee(employee);
+            System.out.println("Employee successfully added!");
+            response.setResponseType(ResponseType.SUCCESS);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setResponseType(ResponseType.ERROR);
+            response.setException(ex);
+        }
+        return response;
+    }
+    
 }

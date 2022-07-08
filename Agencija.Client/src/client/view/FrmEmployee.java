@@ -5,6 +5,13 @@
  */
 package client.view;
 
+import client.controller.ClientController;
+import domain.Employee;
+import java.net.SocketException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Andrej
@@ -63,10 +70,28 @@ public class FrmEmployee extends javax.swing.JFrame {
         jLabel6.setText("Password:");
 
         jButton1.setText("Submit");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Discard");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        txtLastName.setText("Markovic");
+
+        txtUsername.setText("123");
+
+        txtPassword.setText("123");
 
         cmbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Agent", "Manager", "Secretary", "Accountant" }));
+
+        txtFirstName.setText("Andrej");
 
         jLabel7.setText("Search Employees:");
 
@@ -194,11 +219,39 @@ public class FrmEmployee extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        txtFirstName.setText("");
+        txtLastName.setText("");
+        txtUsername.setText("");
+        txtPassword.setText("");
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        if (txtFirstName.getText().isEmpty() || txtLastName.getText().isEmpty()
+                || txtUsername.getText().isEmpty() || txtPassword.getPassword().length == 0) {
+            JOptionPane.showMessageDialog(this, "All fields must be filled in before submitting!", "Submit error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            Employee employee = new Employee();
+            employee.setFirstName(txtFirstName.getText());
+            employee.setLastName(txtLastName.getText());
+            employee.setUsername(txtUsername.getText());
+            employee.setPassword(String.valueOf(txtPassword.getPassword()));
+            employee.setRole((String) cmbRole.getSelectedItem());
+            boolean success = ClientController.getInstance().addEmployee(employee);
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Employee successfully added!");
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Operation error", JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_jButton1ActionPerformed
+    }
     /**
      * @param args the command line arguments
      */
- 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;

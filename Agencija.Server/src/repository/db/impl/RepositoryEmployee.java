@@ -8,6 +8,7 @@ package repository.db.impl;
 import domain.Employee;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -37,7 +38,7 @@ public class RepositoryEmployee implements DBRepository<Employee, Long> {
             connection = DBConnectionFactory.getInstance().getConnection();
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
-           
+
             while (rs.next()) {
                 Employee e = new Employee();
                 e.setEmployeeID(rs.getLong("EmployeeID"));
@@ -60,8 +61,24 @@ public class RepositoryEmployee implements DBRepository<Employee, Long> {
     }
 
     @Override
-    public void add(Employee t) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void add(Employee e) throws IOException, SQLException {
+        String query = "INSERT INTO EMPLOYEE(FirstName,LastName,Role,Username,Password) VALUES(?,?,?,?,?)";
+        try {
+            System.out.println(query);
+            connection = DBConnectionFactory.getInstance().getConnection();
+            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, e.getFirstName());
+            statement.setString(2, e.getLastName());
+            statement.setString(3, e.getRole());
+            statement.setString(4, e.getUsername());
+            statement.setString(5, e.getPassword());
+            statement.executeUpdate();
+            System.out.println("Employee added");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.out.println("Failure in adding employee");
+        }
+
     }
 
     @Override
@@ -78,5 +95,7 @@ public class RepositoryEmployee implements DBRepository<Employee, Long> {
     public Employee getById(Long k) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    
 
 }

@@ -6,6 +6,8 @@
 package controller;
 
 import domain.Employee;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import repository.db.impl.RepositoryApartmentFeatures;
 import repository.db.impl.RepositoryEmployee;
 import repository.db.impl.RepositoryFeatureValue;
@@ -23,23 +25,11 @@ import so.employee.LoginEmployeeSO;
 public class ServerController {
 
     private static ServerController instance;
-    private final RepositoryEmployee storageEmployee;
-    private final RepositoryApartmentFeatures storageAppFeatures;
-    private final RepositoryFeatureValue storageFeatureValues;
-    private final RepositoryListing storageListing;
-    private final RepositoryLocation storageLocation;
-    private final RepositoryRental storageRental;
+   
 
     public ServerController() {
-        this.storageEmployee = new RepositoryEmployee();
-        this.storageAppFeatures = new RepositoryApartmentFeatures();
-        this.storageFeatureValues = new RepositoryFeatureValue();
-        this.storageListing = new RepositoryListing();
-        this.storageLocation = new RepositoryLocation();
-        this.storageRental = new RepositoryRental();
+    
     }
-    
-    
 
     public static ServerController getInstance() {
         if (instance == null) {
@@ -53,13 +43,14 @@ public class ServerController {
         loginEmployeeSo.execute(employee);
         Employee e = loginEmployeeSo.getEmployee();
         System.out.println(e);
-        
+
         return loginEmployeeSo.getEmployee();
     }
 
-    public void addEmployee(Employee employee) throws Exception {
+    public void addEmployee(Employee employee) throws Exception  {
         AddEmployeeSO addEmployeeSo = new AddEmployeeSO();
         addEmployeeSo.execute(employee);
+
     }
 
 }

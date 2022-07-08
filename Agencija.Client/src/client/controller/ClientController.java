@@ -57,4 +57,16 @@ public class ClientController {
         }
     }
 
+    public boolean addEmployee(Employee employee) throws Exception {
+        Request request = new Request(Operations.ADD_EMPLOYEE, employee);
+        Response response = Communication.getInstance().addEmployee(request);
+        if(response.getResponseType().equals(ResponseType.SUCCESS)){
+            return true;
+        }
+        else{
+            throw response.getException();
+        }
+        
+    }
+
 }

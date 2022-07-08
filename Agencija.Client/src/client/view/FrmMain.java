@@ -53,6 +53,11 @@ public class FrmMain extends javax.swing.JFrame {
         jMenuEmployee.setText("Employee");
 
         jmiOpenEmployeeFrm.setText(" Open Employee Form");
+        jmiOpenEmployeeFrm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiOpenEmployeeFrmActionPerformed(evt);
+            }
+        });
         jMenuEmployee.add(jmiOpenEmployeeFrm);
 
         jMenuMain.add(jMenuEmployee);
@@ -86,6 +91,12 @@ public class FrmMain extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jmiOpenEmployeeFrmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiOpenEmployeeFrmActionPerformed
+        FrmEmployee frm = new FrmEmployee();
+        frm.setVisible(true);
+        frm.setLocationRelativeTo(null);
+    }//GEN-LAST:event_jmiOpenEmployeeFrmActionPerformed
 
     /**
      * @param args the command line arguments

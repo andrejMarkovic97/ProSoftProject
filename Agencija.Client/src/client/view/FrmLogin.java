@@ -47,6 +47,10 @@ public class FrmLogin extends javax.swing.JFrame {
 
         jLabel2.setText("Password :");
 
+        txtUsername.setText("admin");
+
+        txtPassword.setText("123");
+
         btnSubmit.setText("Submit");
         btnSubmit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -120,12 +124,12 @@ public class FrmLogin extends javax.swing.JFrame {
                 this.dispose();
             }
             else{
-                JOptionPane.showMessageDialog(this,"Please enter your credentials","Invalid credentials", ERROR);
+                JOptionPane.showMessageDialog(this,"Please enter your credentials","Invalid credentials", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (Exception ex) {
             if (ex instanceof SocketException) {
-                JOptionPane.showMessageDialog(this, ex, "Communication with the server has been disrupted", ERROR);
+                JOptionPane.showMessageDialog(this, ex, "Communication with the server has been disrupted", JOptionPane.ERROR_MESSAGE);
                 this.dispose();
 
             } else {

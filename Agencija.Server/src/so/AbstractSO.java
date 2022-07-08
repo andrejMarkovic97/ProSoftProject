@@ -19,8 +19,10 @@ public abstract class AbstractSO {
             commitTransaction();
             System.out.println("Successful system operation");
         } catch (Exception exception) {
+            exception.printStackTrace();
             System.out.println("Error in system operation");
             rollbackTransaction();
+            throw new Exception(exception.getMessage());
         }
     }
 
