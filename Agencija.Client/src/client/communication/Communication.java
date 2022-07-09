@@ -50,7 +50,6 @@ public class Communication {
 
     public Response getAllEmployees(Request request) throws Exception {
         new Sender(socket).send(request);
-        System.out.println("Get all employees request has been sent");
         return (Response) new Reciever(socket).recieve();
     }
 

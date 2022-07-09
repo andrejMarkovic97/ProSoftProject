@@ -6,7 +6,7 @@
 package client.view;
 
 import client.controller.ClientController;
-import client.view.models.EmployeeTable;
+import client.view.models.TableModelEmployee;
 import domain.Employee;
 import java.net.SocketException;
 import java.util.logging.Level;
@@ -24,8 +24,12 @@ public class FrmEmployee extends javax.swing.JFrame {
      */
     public FrmEmployee() {
         initComponents();
-        tblEmployee.setModel(new EmployeeTable());
+        TableModelEmployee model = new TableModelEmployee();
+        Thread th = new Thread(model);
+        th.start();
+        tblEmployee.setModel(model);
         fillEmployeeTable();
+        
     }
 
     /**
@@ -52,11 +56,11 @@ public class FrmEmployee extends javax.swing.JFrame {
         cmbRole = new javax.swing.JComboBox<>();
         txtFirstName = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        txtSearchEmployee = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblEmployee = new javax.swing.JTable();
         btnEdit = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
+        txtSearch = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -115,6 +119,12 @@ public class FrmEmployee extends javax.swing.JFrame {
 
         btnDelete.setText("Delete");
 
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -160,7 +170,7 @@ public class FrmEmployee extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtSearchEmployee))
+                        .addComponent(txtSearch))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -171,7 +181,7 @@ public class FrmEmployee extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel7)
-                    .addComponent(txtSearchEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -216,7 +226,7 @@ public class FrmEmployee extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -246,15 +256,21 @@ public class FrmEmployee extends javax.swing.JFrame {
             boolean success = ClientController.getInstance().addEmployee(employee);
             if (success) {
                 JOptionPane.showMessageDialog(this, "Employee successfully added!");
-                EmployeeTable et = (EmployeeTable) tblEmployee.getModel();
+                TableModelEmployee et = (TableModelEmployee) tblEmployee.getModel();
                 et.add(employee);
-                
+
             }
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Operation error", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_jButton1ActionPerformed
     }
+    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
+        String param = txtSearch.getText();
+       TableModelEmployee tbl = (TableModelEmployee) tblEmployee.getModel();
+       tbl.setParam(param);
+    }//GEN-LAST:event_txtSearchKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -277,12 +293,12 @@ public class FrmEmployee extends javax.swing.JFrame {
     private javax.swing.JTextField txtFirstName;
     private javax.swing.JTextField txtLastName;
     private javax.swing.JPasswordField txtPassword;
-    private javax.swing.JTextField txtSearchEmployee;
+    private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 
     private void fillEmployeeTable() {
-        EmployeeTable et = (EmployeeTable) tblEmployee.getModel();
+        TableModelEmployee et = (TableModelEmployee) tblEmployee.getModel();
         et.fillTable();
     }
 }
