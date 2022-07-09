@@ -6,8 +6,10 @@
 package controller;
 
 import domain.Employee;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import repository.db.DBRepository;
 import repository.db.impl.RepositoryApartmentFeatures;
 import repository.db.impl.RepositoryEmployee;
 import repository.db.impl.RepositoryFeatureValue;
@@ -25,11 +27,13 @@ import so.employee.LoginEmployeeSO;
 public class ServerController {
 
     private static ServerController instance;
-   
+    private final DBRepository storageEmployee;
 
     public ServerController() {
-    
+        storageEmployee = new RepositoryEmployee();
     }
+
+    
 
     public static ServerController getInstance() {
         if (instance == null) {
@@ -51,6 +55,11 @@ public class ServerController {
         AddEmployeeSO addEmployeeSo = new AddEmployeeSO();
         addEmployeeSo.execute(employee);
 
+    }
+
+    public ArrayList<Employee> getAllEmployees() throws Exception {
+        ArrayList<Employee> list = (ArrayList<Employee>) storageEmployee.getAll();
+        return list;
     }
 
 }

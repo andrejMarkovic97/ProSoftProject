@@ -20,4 +20,5 @@ public class Operations {
     public static final int DELETE_RENTAL= 7;
     public static final int UPDATE_EMPLOYEE=8;
     public static final int UPDATE_LISTING=9;
+    public static final int GET_EMPLOYEES= 10;
 }

@@ -15,6 +15,7 @@ import domain.Listing;
 import domain.Rental;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 /**
  *
@@ -50,7 +51,7 @@ public class ClientController {
 
         if (response.getResponseType().equals(ResponseType.SUCCESS)) {
             Employee employee = (Employee) response.getResult();
-            
+
             return employee;
         } else {
             throw response.getException();
@@ -60,13 +61,24 @@ public class ClientController {
     public boolean addEmployee(Employee employee) throws Exception {
         Request request = new Request(Operations.ADD_EMPLOYEE, employee);
         Response response = Communication.getInstance().addEmployee(request);
-        if(response.getResponseType().equals(ResponseType.SUCCESS)){
+        if (response.getResponseType().equals(ResponseType.SUCCESS)) {
             return true;
-        }
-        else{
+        } else {
             throw response.getException();
         }
-        
+
     }
 
+    public ArrayList<Employee> getAllEmployees() throws Exception {
+        ArrayList<Employee> list = new ArrayList<>();
+        Request request = new Request(Operations.GET_EMPLOYEES, null);
+        Response response = Communication.getInstance().getAllEmployees(request);
+        if (response.getResponseType().equals(ResponseType.SUCCESS)) {
+            list = (ArrayList<Employee>) response.getResult();
+
+        } else {
+            throw response.getException();
+        }
+        return list;
+    }
 }

@@ -6,6 +6,7 @@
 package client.view;
 
 import client.controller.ClientController;
+import client.view.models.EmployeeTable;
 import domain.Employee;
 import java.net.SocketException;
 import java.util.logging.Level;
@@ -23,6 +24,8 @@ public class FrmEmployee extends javax.swing.JFrame {
      */
     public FrmEmployee() {
         initComponents();
+        tblEmployee.setModel(new EmployeeTable());
+        fillEmployeeTable();
     }
 
     /**
@@ -243,6 +246,9 @@ public class FrmEmployee extends javax.swing.JFrame {
             boolean success = ClientController.getInstance().addEmployee(employee);
             if (success) {
                 JOptionPane.showMessageDialog(this, "Employee successfully added!");
+                EmployeeTable et = (EmployeeTable) tblEmployee.getModel();
+                et.add(employee);
+                
             }
 
         } catch (Exception ex) {
@@ -274,4 +280,9 @@ public class FrmEmployee extends javax.swing.JFrame {
     private javax.swing.JTextField txtSearchEmployee;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
+
+    private void fillEmployeeTable() {
+        EmployeeTable et = (EmployeeTable) tblEmployee.getModel();
+        et.fillTable();
+    }
 }

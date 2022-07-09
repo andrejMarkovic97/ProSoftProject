@@ -134,7 +134,7 @@ public class FrmLogin extends javax.swing.JFrame {
 
             } else {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Login Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
 
