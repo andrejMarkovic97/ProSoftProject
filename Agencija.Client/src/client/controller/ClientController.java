@@ -81,4 +81,16 @@ public class ClientController {
         }
         return list;
     }
+
+    public void deleteEmployee(Employee e) throws Exception {
+        Request request = new Request(Operations.DELETE_EMPLOYEE, e);
+        Response response = Communication.getInstance().deleteEmployee(e);
+        
+        if(response.getResponseType().equals(ResponseType.SUCCESS)){
+            System.out.println("Employee successfully deleted!");
+        }
+        else{
+            throw response.getException();
+        }
+    }
 }

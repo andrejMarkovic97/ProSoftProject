@@ -16,15 +16,13 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Andrej
  */
-public class TableModelEmployee extends AbstractTableModel implements Runnable {
+public class TableModelEmployee extends AbstractTableModel {
 
-    ArrayList<Employee> list;
+    private ArrayList<Employee> list;
     String[] columns = {"First Name", "Last Name", "Role"};
-    private String param;
 
     public TableModelEmployee() {
         list = new ArrayList<>();
-        param ="";
     }
 
     @Override
@@ -72,40 +70,59 @@ public class TableModelEmployee extends AbstractTableModel implements Runnable {
         fireTableDataChanged();
     }
 
-    @Override
-    public void run() {
-        try {
-            while (!Thread.currentThread().isInterrupted()) {
-                Thread.sleep(10000);
-                refreshTable();
+    public void setParam(String param) throws Exception {
+
+        ArrayList<Employee> newList = new ArrayList<>();
+        if (!param.equals("")) {
+            for (Employee employee : list) {
+                if (employee.getFirstName().toLowerCase().contains(param.toLowerCase())
+                        || employee.getLastName().contains(param.toLowerCase())) {
+                    newList.add(employee);
+                }
             }
-        } catch (InterruptedException ex) {
+            if (newList.isEmpty()) {
+                throw new Exception("Sistem ne može da pronađe zaposlene po zadatim vrijednostima");
+            }
+            list = newList;
+
+        }
+
+    }
+
+    public void delete(int row) throws Exception {
+        Employee e = list.get(row);
+        try {
+            ClientController.getInstance().deleteEmployee(e);
+            fireTableDataChanged();
+        } catch (Exception ex) {
             Logger.getLogger(TableModelEmployee.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
-    private void refreshTable() {
-        try {
-            list = ClientController.getInstance().getAllEmployees();
-            if (!param.equals("")) {
-                ArrayList<Employee> newList = new ArrayList<>();
-                for (Employee e : list) {
-                    if (e.getFirstName().toLowerCase().contains(param.toLowerCase()) || e.getLastName().contains(param.toLowerCase())) {
-                        newList.add(e);
-                    }
+    public ArrayList<Employee> getList() {
+        return list;
+    }
+
+    public void search(String param) throws Exception {
+        list = ClientController.getInstance().getAllEmployees();
+        ArrayList<Employee> newList = new ArrayList<>();
+        if (!param.equals("")) {
+            for (Employee employee : list) {
+                if (employee.getFirstName().toLowerCase().contains(param.toLowerCase())
+                        || employee.getLastName().contains(param.toLowerCase())) {
+                    newList.add(employee);
                 }
-                list = newList;
             }
-
+            if (newList.isEmpty()) {
+                throw new Exception("Sistem ne može da pronađe zaposlene po zadatim vrijednostima");
+            }
+            list = newList;
             fireTableDataChanged();
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
-    }
+        else{
+            throw new Exception("Prvo unesite vrijednost prije pretrage");
+        }
 
-    public void setParam(String param) {
-        this.param = param;
-        refreshTable();
     }
 }
