@@ -8,6 +8,8 @@ package client.view;
 import client.controller.ClientController;
 import client.view.models.TableModelEmployee;
 import domain.Employee;
+import domain.Rental;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -21,7 +23,7 @@ public class FrmEmployee extends javax.swing.JFrame {
     /**
      * Creates new form FrmEmployee
      */
-    public FrmEmployee() {
+    public FrmEmployee(){
         initComponents();
         TableModelEmployee model = new TableModelEmployee();
         tblEmployee.setModel(model);
@@ -59,6 +61,7 @@ public class FrmEmployee extends javax.swing.JFrame {
         btnDelete = new javax.swing.JButton();
         btnSearch = new javax.swing.JButton();
         txtSearch = new javax.swing.JTextField();
+        btnReset = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -226,17 +229,30 @@ public class FrmEmployee extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        btnReset.setText("Reset Search");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(160, 160, 160))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnReset)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -263,6 +279,7 @@ public class FrmEmployee extends javax.swing.JFrame {
             employee.setUsername(txtUsername.getText());
             employee.setPassword(String.valueOf(txtPassword.getPassword()));
             employee.setRole((String) cmbRole.getSelectedItem());
+            employee.setRentals(new ArrayList<Rental>());
             boolean success = ClientController.getInstance().addEmployee(employee);
             if (success) {
                 JOptionPane.showMessageDialog(this, "Employee successfully added!");
@@ -292,6 +309,7 @@ public class FrmEmployee extends javax.swing.JFrame {
             try {
                 tbl.delete(row);
                 JOptionPane.showMessageDialog(this, "Employee successfully deleted!");
+                fillEmployeeTable();
             } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", HEIGHT);
@@ -312,12 +330,19 @@ public class FrmEmployee extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSearchActionPerformed
 
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        TableModelEmployee tbl = (TableModelEmployee) tblEmployee.getModel();
+        txtSearch.setText("");
+        tbl.fillTable();
+    }//GEN-LAST:event_btnResetActionPerformed
+
     /**
      * @param args the command line arguments
      */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cmbRole;
     private javax.swing.JButton jButton1;

@@ -18,6 +18,7 @@ import repository.db.impl.RepositoryLocation;
 import repository.db.impl.RepositoryRental;
 import so.AbstractSO;
 import so.employee.AddEmployeeSO;
+import so.employee.DeleteEmployeeSO;
 import so.employee.LoginEmployeeSO;
 
 /**
@@ -60,6 +61,11 @@ public class ServerController {
     public ArrayList<Employee> getAllEmployees() throws Exception {
         ArrayList<Employee> list = (ArrayList<Employee>) storageEmployee.getAll();
         return list;
+    }
+
+    public void deleteEmployee(Employee e) throws Exception {
+        DeleteEmployeeSO deleteEmployeeSO = new DeleteEmployeeSO();
+        deleteEmployeeSO.execute(e);
     }
 
 }

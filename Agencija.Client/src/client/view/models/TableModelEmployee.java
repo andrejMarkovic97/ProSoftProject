@@ -16,7 +16,7 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Andrej
  */
-public class TableModelEmployee extends AbstractTableModel {
+public class TableModelEmployee extends AbstractTableModel{
 
     private ArrayList<Employee> list;
     String[] columns = {"First Name", "Last Name", "Role"};
@@ -60,6 +60,7 @@ public class TableModelEmployee extends AbstractTableModel {
     public void fillTable() {
         try {
             list = ClientController.getInstance().getAllEmployees();
+            fireTableDataChanged();
         } catch (Exception ex) {
             Logger.getLogger(TableModelEmployee.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -93,6 +94,7 @@ public class TableModelEmployee extends AbstractTableModel {
         Employee e = list.get(row);
         try {
             ClientController.getInstance().deleteEmployee(e);
+            list.remove(row);
             fireTableDataChanged();
         } catch (Exception ex) {
             Logger.getLogger(TableModelEmployee.class.getName()).log(Level.SEVERE, null, ex);
@@ -119,10 +121,11 @@ public class TableModelEmployee extends AbstractTableModel {
             }
             list = newList;
             fireTableDataChanged();
-        }
-        else{
+        } else {
             throw new Exception("Prvo unesite vrijednost prije pretrage");
         }
 
     }
+
+    
 }

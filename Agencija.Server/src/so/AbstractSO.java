@@ -5,6 +5,8 @@
  */
 package so;
 
+import repository.db.DBConnectionFactory;
+
 /**
  *
  * @author Andrej
@@ -14,7 +16,6 @@ public abstract class AbstractSO {
     public void execute(Object param) throws Exception {
         try {
             precondition(param);
-            startTransaction();
             executeOperation(param);
             commitTransaction();
             System.out.println("Successful system operation");
@@ -30,16 +31,10 @@ public abstract class AbstractSO {
 
     protected abstract void executeOperation(Object param) throws Exception;
 
-    private void startTransaction() {
-
-    }
-
     protected void commitTransaction() throws Exception {
-
     }
 
     protected void rollbackTransaction() throws Exception {
-
     }
 
 }

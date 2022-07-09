@@ -6,8 +6,15 @@
 package repository.db.impl;
 
 import domain.Rental;
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import repository.db.DBConnectionFactory;
 import repository.db.DBRepository;
 
 /**
@@ -43,6 +50,20 @@ public class RepositoryRental implements DBRepository<Rental, Long>{
     @Override
     public Rental getById(Long k) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    void deleteEmployeesRentalsByID(long employeeID) throws Exception {
+         String sql = "DELETE FROM rental WHERE EmployeeID="+employeeID+"";
+        try {
+           connection = DBConnectionFactory.getInstance().getConnection();
+           Statement  statement = connection.createStatement();
+            
+            statement.executeUpdate(sql);
+            System.out.println("Successfully deleted employee rentals");
+        } catch (SQLException ex) {
+           ex.printStackTrace();
+           throw new Exception("Can't delete rentals from employee");
+        }
     }
     
 }

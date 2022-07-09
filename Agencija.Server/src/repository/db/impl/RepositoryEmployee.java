@@ -26,8 +26,10 @@ import repository.db.DBRepository;
 public class RepositoryEmployee implements DBRepository<Employee, Long> {
 
     private Connection connection;
+    private final RepositoryRental storageRental;
 
     public RepositoryEmployee() {
+        storageRental = new RepositoryRental();
     }
 
     @Override
@@ -88,14 +90,29 @@ public class RepositoryEmployee implements DBRepository<Employee, Long> {
 
     @Override
     public void delete(Employee t) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            String sql = "DELETE FROM EMPLOYEE WHERE EmployeeID="+ t.getEmployeeID()+"";
+            connection = DBConnectionFactory.getInstance().getConnection();
+            Statement statement = connection.prepareStatement(sql);
+            if (t.getRole().equals("Agent")) {
+                try {
+                    storageRental.deleteEmployeesRentalsByID(t.getEmployeeID());
+                   
+                    System.out.println("Successfully deleted employee");
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            statement.executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.out.println("Failure in deleting employee");
+        }
     }
 
     @Override
     public Employee getById(Long k) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    
 
 }

@@ -43,7 +43,7 @@ public class FrmApartmentFeatures extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText("Square footage:");
+        jLabel1.setText("Square meters:");
 
         jLabel2.setText("Furnishment:");
 
@@ -59,7 +59,7 @@ public class FrmApartmentFeatures extends javax.swing.JDialog {
 
         txtFloor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
 
-        jLabel6.setText("Room number:");
+        jLabel6.setText("Number of rooms:");
 
         txtRoomNumber.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("0.0"))));
 
@@ -93,7 +93,7 @@ public class FrmApartmentFeatures extends javax.swing.JDialog {
                             .addComponent(cmbHeating, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtFloor)
                             .addComponent(txtRoomNumber))
-                        .addContainerGap(53, Short.MAX_VALUE))))
+                        .addContainerGap(41, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

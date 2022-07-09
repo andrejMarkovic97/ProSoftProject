@@ -84,7 +84,7 @@ public class ClientController {
 
     public void deleteEmployee(Employee e) throws Exception {
         Request request = new Request(Operations.DELETE_EMPLOYEE, e);
-        Response response = Communication.getInstance().deleteEmployee(e);
+        Response response = Communication.getInstance().deleteEmployee(request);
         
         if(response.getResponseType().equals(ResponseType.SUCCESS)){
             System.out.println("Employee successfully deleted!");

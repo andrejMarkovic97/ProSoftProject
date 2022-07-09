@@ -53,8 +53,11 @@ public class Communication {
         return (Response) new Reciever(socket).recieve();
     }
 
-    public Response deleteEmployee(Employee e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  
+
+    public Response deleteEmployee(Request request) throws Exception {
+        new Sender(socket).send(request);
+        return (Response) new Reciever(socket).recieve();
     }
 
    

@@ -48,7 +48,7 @@
                           <Component id="txtFloor" max="32767" attributes="0"/>
                           <Component id="txtRoomNumber" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="53" max="32767" attributes="0"/>
+                      <EmptySpace pref="41" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -95,7 +95,7 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Square footage:"/>
+        <Property name="text" type="java.lang.String" value="Square meters:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
@@ -157,7 +157,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel6">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Room number:"/>
+        <Property name="text" type="java.lang.String" value="Number of rooms:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JFormattedTextField" name="txtRoomNumber">
