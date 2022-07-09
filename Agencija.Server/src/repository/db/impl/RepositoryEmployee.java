@@ -84,9 +84,18 @@ public class RepositoryEmployee implements DBRepository<Employee, Long> {
     }
 
     @Override
-    public void edit(Employee t) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void edit(Employee e)throws Exception {
+         String sql = "UPDATE EMPLOYEE SET FirstName='" + e.getFirstName() + "',"
+                    + "LastName='" + e.getLastName() + "',Role='" + e.getRole() + "', "
+                    + "Username='" + e.getUsername() + "',Password='" + e.getPassword() + "'"+
+                 "WHERE EmployeeID="+e.getEmployeeID();
+            connection = DBConnectionFactory.getInstance().getConnection();
+            Statement statement = connection.prepareStatement(sql);
+
+            statement.executeUpdate(sql);
+            System.out.println("Successfully update employee");
     }
+
 
     @Override
     public void delete(Employee t) throws Exception {

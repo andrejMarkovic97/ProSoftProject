@@ -57,6 +57,8 @@ public class HandleClientThread extends Thread {
                 return getAllEmployees(request);
             case Operations.DELETE_EMPLOYEE:
                 return deleteEmployee(request);
+            case Operations.UPDATE_EMPLOYEE:
+                return updateEmployee(request);
         }
         return null;
     }
@@ -113,14 +115,14 @@ public class HandleClientThread extends Thread {
             ex.printStackTrace();
             response.setResponseType(ResponseType.ERROR);
             response.setException(ex);
-            
+
         }
         return response;
     }
 
     private Response deleteEmployee(Request request) {
         Response response = new Response();
-        
+
         Employee e = (Employee) request.getArgument();
         try {
             ServerController.getInstance().deleteEmployee(e);
@@ -130,7 +132,22 @@ public class HandleClientThread extends Thread {
             response.setResponseType(ResponseType.ERROR);
             response.setException(ex);
         }
-        
+
+        return response;
+    }
+
+    private Response updateEmployee(Request request) {
+        Response response = new Response();
+        Employee e = (Employee) request.getArgument();
+
+        try {
+            ServerController.getInstance().updateEmployee(e);
+            response.setResponseType(ResponseType.SUCCESS);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setResponseType(ResponseType.ERROR);
+            response.setException(ex);
+        }
         return response;
     }
 

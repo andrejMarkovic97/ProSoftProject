@@ -23,12 +23,12 @@ public class FrmEmployee extends javax.swing.JFrame {
     /**
      * Creates new form FrmEmployee
      */
-    public FrmEmployee(){
+    public FrmEmployee() {
         initComponents();
         TableModelEmployee model = new TableModelEmployee();
         tblEmployee.setModel(model);
         fillEmployeeTable();
-        
+
     }
 
     /**
@@ -117,6 +117,11 @@ public class FrmEmployee extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblEmployee);
 
         btnEdit.setText("Edit");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
 
         btnDelete.setText("Delete");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -294,22 +299,21 @@ public class FrmEmployee extends javax.swing.JFrame {
     }
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         int row = tblEmployee.getSelectedRow();
-        if(row<0){
-            JOptionPane.showMessageDialog(this,"No employee selected!", "Error", JOptionPane.ERROR_MESSAGE);
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "No employee selected!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this employee?", "Confirm deletion", JOptionPane.YES_NO_OPTION);
-        
-        if(option==JOptionPane.NO_OPTION){
+
+        if (option == JOptionPane.NO_OPTION) {
             return;
         }
-        
-        if(option == JOptionPane.YES_OPTION){
-           TableModelEmployee tbl = (TableModelEmployee) tblEmployee.getModel();
+
+        if (option == JOptionPane.YES_OPTION) {
+            TableModelEmployee tbl = (TableModelEmployee) tblEmployee.getModel();
             try {
                 tbl.delete(row);
                 JOptionPane.showMessageDialog(this, "Employee successfully deleted!");
-                fillEmployeeTable();
             } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", HEIGHT);
@@ -319,7 +323,7 @@ public class FrmEmployee extends javax.swing.JFrame {
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         String param = txtSearch.getText();
-       TableModelEmployee tbl = (TableModelEmployee) tblEmployee.getModel();
+        TableModelEmployee tbl = (TableModelEmployee) tblEmployee.getModel();
         try {
             tbl.search(param);
             JOptionPane.showMessageDialog(this, "Sistem je pronašao zaposlene po zadatim vrijednostima");
@@ -335,6 +339,31 @@ public class FrmEmployee extends javax.swing.JFrame {
         txtSearch.setText("");
         tbl.fillTable();
     }//GEN-LAST:event_btnResetActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        TableModelEmployee tbl = (TableModelEmployee) tblEmployee.getModel();
+        boolean flag = false;
+        int row = tblEmployee.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Sistem ne moze ucitati zaposlenog", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            Employee e = tbl.getEmployeeRow(row);
+            if (e != null) {
+                if (e.getUsername().equals(ClientController.getInstance().getCurrentEmployee().getUsername())) {
+                    flag = true;
+                }
+                FrmEditEmployee jdfrm = new FrmEditEmployee(this, e, flag);
+                jdfrm.setVisible(true);
+
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Sistem ne moze izmijeniti zaposlenog", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnEditActionPerformed
 
     /**
      * @param args the command line arguments
@@ -367,5 +396,16 @@ public class FrmEmployee extends javax.swing.JFrame {
     private void fillEmployeeTable() {
         TableModelEmployee et = (TableModelEmployee) tblEmployee.getModel();
         et.fillTable();
+    }
+
+    void editEmployee(Employee e) {
+        try {
+            ClientController.getInstance().editEmployee(e);
+            JOptionPane.showMessageDialog(this, "Uspjesna izmjena zaposlenog");
+            fillEmployeeTable();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Sistem ne moze izmijeniti zaposlenog", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

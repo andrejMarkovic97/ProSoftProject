@@ -32,6 +32,7 @@ public abstract class AbstractSO {
     protected abstract void executeOperation(Object param) throws Exception;
 
     protected void commitTransaction() throws Exception {
+        
     }
 
     protected void rollbackTransaction() throws Exception {

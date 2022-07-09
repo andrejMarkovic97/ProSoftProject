@@ -16,7 +16,7 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Andrej
  */
-public class TableModelEmployee extends AbstractTableModel{
+public class TableModelEmployee extends AbstractTableModel {
 
     private ArrayList<Employee> list;
     String[] columns = {"First Name", "Last Name", "Role"};
@@ -127,5 +127,10 @@ public class TableModelEmployee extends AbstractTableModel{
 
     }
 
-    
+  
+
+    public Employee getEmployeeRow(int row) {
+        return list.get(row);
+    }
+
 }

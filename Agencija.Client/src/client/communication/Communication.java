@@ -18,14 +18,16 @@ import java.util.ArrayList;
  * @author Andrej
  */
 public class Communication {
+
     private static Communication instance;
     private Socket socket;
-    private Communication(){
-    
-}
-    
-    public static Communication getInstance(){
-        if(instance == null) {
+
+    private Communication() {
+
+    }
+
+    public static Communication getInstance() {
+        if (instance == null) {
             instance = new Communication();
         }
         return instance;
@@ -34,33 +36,9 @@ public class Communication {
     public void setSocket(Socket socket) {
         this.socket = socket;
     }
-    
-    
-    public Response login(Request request) throws Exception{
-        new Sender(socket).send(request);
-        System.out.println("Login request has been sent");
-        return (Response) new Reciever(socket).recieve();
-    }
 
-    public Response addEmployee(Request request) throws Exception {
-        new Sender(socket).send(request);
-        System.out.println("Add employee request has been sent");
-        return (Response) new Reciever(socket).recieve();
-    }
-
-    public Response getAllEmployees(Request request) throws Exception {
+    public Response sendRequest(Request request) throws Exception {
         new Sender(socket).send(request);
         return (Response) new Reciever(socket).recieve();
     }
-
-  
-
-    public Response deleteEmployee(Request request) throws Exception {
-        new Sender(socket).send(request);
-        return (Response) new Reciever(socket).recieve();
-    }
-
-   
-
-   
 }

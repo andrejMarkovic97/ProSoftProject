@@ -47,7 +47,7 @@ public class ClientController {
 
     public Employee login(Employee e) throws Exception {
         Request request = new Request(Operations.LOGIN, e);
-        Response response = Communication.getInstance().login(request);
+        Response response = Communication.getInstance().sendRequest(request);
 
         if (response.getResponseType().equals(ResponseType.SUCCESS)) {
             Employee employee = (Employee) response.getResult();
@@ -60,7 +60,7 @@ public class ClientController {
 
     public boolean addEmployee(Employee employee) throws Exception {
         Request request = new Request(Operations.ADD_EMPLOYEE, employee);
-        Response response = Communication.getInstance().addEmployee(request);
+        Response response = Communication.getInstance().sendRequest(request);
         if (response.getResponseType().equals(ResponseType.SUCCESS)) {
             return true;
         } else {
@@ -72,7 +72,7 @@ public class ClientController {
     public ArrayList<Employee> getAllEmployees() throws Exception {
         ArrayList<Employee> list = new ArrayList<>();
         Request request = new Request(Operations.GET_EMPLOYEES, null);
-        Response response = Communication.getInstance().getAllEmployees(request);
+        Response response = Communication.getInstance().sendRequest(request);
         if (response.getResponseType().equals(ResponseType.SUCCESS)) {
             list = (ArrayList<Employee>) response.getResult();
 
@@ -84,13 +84,26 @@ public class ClientController {
 
     public void deleteEmployee(Employee e) throws Exception {
         Request request = new Request(Operations.DELETE_EMPLOYEE, e);
-        Response response = Communication.getInstance().deleteEmployee(request);
+        Response response = Communication.getInstance().sendRequest(request);
         
         if(response.getResponseType().equals(ResponseType.SUCCESS)){
             System.out.println("Employee successfully deleted!");
         }
         else{
             throw response.getException();
+        }
+    }
+
+    
+
+    public void editEmployee(Employee e) throws Exception{
+        Request request = new Request(Operations.UPDATE_EMPLOYEE, e);
+        Response response = Communication.getInstance().sendRequest(request);
+        if(response.getResponseType().equals(ResponseType.SUCCESS)){
+            System.out.println("Employee successfully edited!");
+        }
+        else{
+           throw response.getException();  
         }
     }
 }
