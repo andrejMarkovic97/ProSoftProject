@@ -65,6 +65,11 @@ public class FrmMain extends javax.swing.JFrame {
         jmiOpenListingFrm.setText("Listing");
 
         jMenuItem1.setText("Open Listing Form");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jmiOpenListingFrm.add(jMenuItem1);
 
         jMenuMain.add(jmiOpenListingFrm);
@@ -97,6 +102,12 @@ public class FrmMain extends javax.swing.JFrame {
         frm.setVisible(true);
         frm.setLocationRelativeTo(null);
     }//GEN-LAST:event_jmiOpenEmployeeFrmActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        FrmListing frm = new FrmListing();
+        frm.setVisible(true);
+        
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments

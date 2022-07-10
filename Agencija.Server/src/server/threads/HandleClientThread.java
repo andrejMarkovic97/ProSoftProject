@@ -12,13 +12,14 @@ import communication.Response;
 import communication.ResponseType;
 
 import controller.ServerController;
+import domain.ApartmentFeatures;
 import domain.Employee;
+import domain.Listing;
+import domain.Location;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -59,6 +60,12 @@ public class HandleClientThread extends Thread {
                 return deleteEmployee(request);
             case Operations.UPDATE_EMPLOYEE:
                 return updateEmployee(request);
+            case Operations.GET_LOCATIONS:
+                return getAllLocations(request);
+            case Operations.GET_APARTMENT_FEATURES:
+                return getAllApartmentFeatures(request);
+            case Operations.ADD_LISTING:
+                return addListing(request);
         }
         return null;
     }
@@ -151,4 +158,54 @@ public class HandleClientThread extends Thread {
         return response;
     }
 
+    private Response getAllLocations(Request request) {
+        Response response = new Response();
+        try {
+
+            ArrayList<Location> list = ServerController.getInstance().getAllLocations();
+            System.out.println("Locations successfully fetched!");
+            response.setResponseType(ResponseType.SUCCESS);
+            response.setResult(list);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setResponseType(ResponseType.ERROR);
+            response.setException(ex);
+
+        }
+        return response;
+    }
+
+    private Response getAllApartmentFeatures(Request request) {
+        Response response = new Response();
+        try {
+
+            ArrayList<ApartmentFeatures> list = ServerController.getInstance().getAllApartmentFeatures();
+            System.out.println("Apartment features successfully fetched!");
+            response.setResponseType(ResponseType.SUCCESS);
+            response.setResult(list);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setResponseType(ResponseType.ERROR);
+            response.setException(ex);
+
+        }
+        return response;
+    }
+
+    private Response addListing(Request request) {
+        Response response = new Response();
+        Listing listing= (Listing) request.getArgument();
+        try {
+            ServerController.getInstance().addListing(listing);
+            System.out.println("Listing successfully added!");
+            response.setResponseType(ResponseType.SUCCESS);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setResponseType(ResponseType.ERROR);
+            response.setException(ex);
+        }
+        return response;
+    }
+
+    
 }

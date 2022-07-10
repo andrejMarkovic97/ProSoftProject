@@ -5,18 +5,32 @@
  */
 package client.view;
 
+import client.controller.ClientController;
+import domain.Listing;
+import domain.Location;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Andrej
  */
 public class FrmSelectLocation extends javax.swing.JDialog {
-
-    /**
-     * Creates new form FrmLocation
-     */
-    public FrmSelectLocation(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    
+    private FrmListing frm;
+    private ArrayList<Location> locations;
+    private Listing listing;
+    
+    public FrmSelectLocation(FrmListing frm, Listing listing) {
+        this.frm = frm;
+        this.listing = listing;
+        setLocationRelativeTo(null);
         initComponents();
+        locations = getLocations();
+        fillLocations(locations);
+        
     }
 
     /**
@@ -42,12 +56,27 @@ public class FrmSelectLocation extends javax.swing.JDialog {
         jLabel2.setText("Neighborhood:");
 
         cmbCity.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbCity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCityActionPerformed(evt);
+            }
+        });
 
         cmbNeighborhood.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnSubmit.setText("Submit");
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
 
         btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -55,21 +84,17 @@ public class FrmSelectLocation extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(70, 70, 70)
-                        .addComponent(cmbCity, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
-                            .addComponent(btnCancel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnSubmit))
-                            .addComponent(cmbNeighborhood, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel2)
+                        .addComponent(btnCancel))
+                    .addComponent(jLabel1))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cmbCity, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(btnSubmit)
+                        .addComponent(cmbNeighborhood, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -93,7 +118,33 @@ public class FrmSelectLocation extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-   
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        if (listing == null) {
+            listing = new Listing();
+        }
+        String city = (String) cmbCity.getSelectedItem();
+        String neighborhood = (String) cmbNeighborhood.getSelectedItem();
+        Location loc = new Location();
+        for (Location location : this.locations) {
+            if (location.getCity().equals(city) && location.getNeighborhood().equals(neighborhood)) {
+                loc = location;
+            }
+        }
+        
+        listing.setLocation(loc);
+        frm.setListing(listing);
+        this.dispose();
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
+    private void cmbCityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCityActionPerformed
+        String city = (String) cmbCity.getSelectedItem();
+        fillNeighborhoods(city);
+    }//GEN-LAST:event_cmbCityActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -103,4 +154,41 @@ public class FrmSelectLocation extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
+
+    private ArrayList<Location> getLocations() {
+        ArrayList<Location> loc = new ArrayList<>();
+        try {
+            loc = ClientController.getInstance().getAllLocations();
+        } catch (Exception ex) {
+            Logger.getLogger(FrmSelectLocation.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return loc;
+        
+    }
+    
+    private void fillLocations(ArrayList<Location> locations) {
+        ArrayList<String> cities = new ArrayList<>();
+        cmbCity.removeAllItems();
+        for (Location loc : locations) {
+            if (!cities.contains(loc.getCity())) {
+                cities.add(loc.getCity());
+                cmbCity.addItem(loc.getCity());
+            }
+            
+        }
+        String city = (String) cmbCity.getSelectedItem();
+        fillNeighborhoods(city);
+    }
+    
+    private void fillNeighborhoods(String city) {
+        cmbNeighborhood.removeAllItems();
+        ArrayList neighborhoods = new ArrayList();
+        for (Location loc : locations) {
+            if (loc.getCity().equals(city) && !neighborhoods.contains(loc.getNeighborhood())) {
+                cmbNeighborhood.addItem(loc.getNeighborhood());
+                neighborhoods.add(loc.getNeighborhood());
+            }
+        }
+    }
 }

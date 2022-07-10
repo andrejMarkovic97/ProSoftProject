@@ -21,4 +21,6 @@ public class Operations {
     public static final int UPDATE_EMPLOYEE=8;
     public static final int UPDATE_LISTING=9;
     public static final int GET_EMPLOYEES= 10;
+    public static final int GET_LOCATIONS = 11;
+    public static final int GET_APARTMENT_FEATURES= 12;
 }

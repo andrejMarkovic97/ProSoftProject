@@ -5,6 +5,18 @@
  */
 package client.view;
 
+import client.controller.ClientController;
+import client.view.models.TableModelApartmentFeatures;
+import domain.ApartmentFeatures;
+import domain.FeatureValue;
+import domain.Listing;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.TableModel;
+import javax.swing.text.html.parser.DTDConstants;
+
 /**
  *
  * @author Andrej
@@ -14,9 +26,18 @@ public class FrmApartmentFeatures extends javax.swing.JDialog {
     /**
      * Creates new form FrmApartmentFeatures
      */
-    public FrmApartmentFeatures(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    Listing listing;
+    FrmListing frm;
+    boolean flag = false;
+    public FrmApartmentFeatures(FrmListing frm,Listing listing) {
+        this.frm = frm;
+        this.listing = listing;
         initComponents();
+        setLocationRelativeTo(null);
+        TableModelApartmentFeatures model = new TableModelApartmentFeatures();
+        tblApartmentFeatures.setModel(model);
+        fillTable();
+        model.setListing(listing);
     }
 
     /**
@@ -28,44 +49,47 @@ public class FrmApartmentFeatures extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        txtSquareFootage = new javax.swing.JFormattedTextField();
-        cmbFurnished = new javax.swing.JComboBox<>();
-        cmbHeating = new javax.swing.JComboBox<>();
-        txtFloor = new javax.swing.JFormattedTextField();
-        jLabel6 = new javax.swing.JLabel();
-        txtRoomNumber = new javax.swing.JFormattedTextField();
         btnCancel = new javax.swing.JButton();
+        btnInsertValue = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblApartmentFeatures = new javax.swing.JTable();
         btnSubmit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText("Square meters:");
-
-        jLabel2.setText("Furnishment:");
-
-        jLabel3.setText("Heating:");
-
-        jLabel4.setText("Floor:");
-
-        txtSquareFootage.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-
-        cmbFurnished.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Furnished", "Unfirnished" }));
-
-        cmbHeating.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TA", "Electric", "Gas", "Central" }));
-
-        txtFloor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-
-        jLabel6.setText("Number of rooms:");
-
-        txtRoomNumber.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("0.0"))));
-
         btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+
+        btnInsertValue.setText("Insert Value");
+        btnInsertValue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertValueActionPerformed(evt);
+            }
+        });
+
+        tblApartmentFeatures.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblApartmentFeatures);
 
         btnSubmit.setText("Submit");
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -74,73 +98,90 @@ public class FrmApartmentFeatures extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnCancel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(112, 112, 112)
+                        .addComponent(btnInsertValue)
+                        .addGap(124, 124, 124)
                         .addComponent(btnSubmit)
-                        .addGap(21, 21, 21))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtSquareFootage)
-                            .addComponent(cmbFurnished, 0, 230, Short.MAX_VALUE)
-                            .addComponent(cmbHeating, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtFloor)
-                            .addComponent(txtRoomNumber))
-                        .addContainerGap(41, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtSquareFootage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(txtRoomNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(cmbFurnished, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(cmbHeating, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtFloor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSubmit)
-                    .addComponent(btnCancel))
+                    .addComponent(btnInsertValue)
+                    .addComponent(btnCancel)
+                    .addComponent(btnSubmit))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnInsertValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertValueActionPerformed
+        int row = tblApartmentFeatures.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Morate izabrati odgovarajucu karakteristiku!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        TableModelApartmentFeatures model = (TableModelApartmentFeatures) tblApartmentFeatures.getModel();
+        ApartmentFeatures af = model.getApartmentFeature(row);
+        FrmFeatureValues frm = new FrmFeatureValues(af, this, listing);
+        frm.setVisible(true);
+
+    }//GEN-LAST:event_btnInsertValueActionPerformed
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        if(flag==false){
+            JOptionPane.showMessageDialog(this, "You must insert atleast one apartment feature value!");
+            return;
+        }
+        frm.setListing(listing);
+        this.dispose();
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnInsertValue;
     private javax.swing.JButton btnSubmit;
-    private javax.swing.JComboBox<String> cmbFurnished;
-    private javax.swing.JComboBox<String> cmbHeating;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JFormattedTextField txtFloor;
-    private javax.swing.JFormattedTextField txtRoomNumber;
-    private javax.swing.JFormattedTextField txtSquareFootage;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblApartmentFeatures;
     // End of variables declaration//GEN-END:variables
+
+    
+
+    void addFeatureValue(Listing listing, ApartmentFeatures af, FeatureValue fv) {
+        if(this.listing==null){
+            System.out.println("Listing is null");
+            return;
+        }
+        if(this.listing.getFeatureValues()==null){
+            this.listing.setFeatureValues(new ArrayList<FeatureValue>());
+        }
+        this.listing.getFeatureValues().add(fv);
+        
+        if(af.getFeatureValues()==null){
+            af.setFeatureValues(new ArrayList<FeatureValue>());
+        }
+        af.getFeatureValues().add(fv);
+        TableModelApartmentFeatures model = (TableModelApartmentFeatures) tblApartmentFeatures.getModel();
+        model.updateFeature(af);
+        flag = true;
+    }
+
+    private void fillTable() {
+     TableModelApartmentFeatures model = (TableModelApartmentFeatures) tblApartmentFeatures.getModel();
+     model.fillTable();
+    }
 }

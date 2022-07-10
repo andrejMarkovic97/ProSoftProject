@@ -6,12 +6,7 @@
 package so.employee;
 
 import domain.Employee;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import repository.db.DBRepository;
 import repository.db.impl.RepositoryEmployee;
 import so.AbstractSO;
 
@@ -19,14 +14,14 @@ import so.AbstractSO;
  *
  * @author Andrej
  */
-public class AddEmployeeSO extends AbstractSO {
+public class SOUpdateEmployee extends AbstractSO{
+     RepositoryEmployee storageEmployee;
 
-    private final RepositoryEmployee storageEmployee;
-
-    public AddEmployeeSO() {
+    public SOUpdateEmployee() {
         storageEmployee = new RepositoryEmployee();
     }
-
+     
+    
     @Override
     protected void precondition(Object param) throws Exception {
         if (param == null || !(param instanceof Employee)) {
@@ -47,10 +42,8 @@ public class AddEmployeeSO extends AbstractSO {
 
     @Override
     protected void executeOperation(Object param) throws Exception {
-        Employee e = (Employee) param;
         storageEmployee.connect();
-        storageEmployee.add(e);
-
+        storageEmployee.edit((Employee) param);
     }
 
     @Override
@@ -61,7 +54,6 @@ public class AddEmployeeSO extends AbstractSO {
     @Override
     protected void rollbackTransaction() throws Exception {
         storageEmployee.rollback();
-
     }
-
+    
 }

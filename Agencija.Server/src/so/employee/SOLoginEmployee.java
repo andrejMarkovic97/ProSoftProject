@@ -14,12 +14,12 @@ import so.AbstractSO;
  *
  * @author Andrej
  */
-public class LoginEmployeeSO extends AbstractSO {
+public class SOLoginEmployee extends AbstractSO {
 
     private Employee employee;
     private final RepositoryEmployee storageEmployee;
 
-    public LoginEmployeeSO() {
+    public SOLoginEmployee() {
         employee = null;
         storageEmployee = new RepositoryEmployee();
     }

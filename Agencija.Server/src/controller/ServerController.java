@@ -5,7 +5,10 @@
  */
 package controller;
 
+import domain.ApartmentFeatures;
 import domain.Employee;
+import domain.Listing;
+import domain.Location;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,11 +20,14 @@ import repository.db.impl.RepositoryListing;
 import repository.db.impl.RepositoryLocation;
 import repository.db.impl.RepositoryRental;
 import so.AbstractSO;
-import so.employee.AddEmployeeSO;
-import so.employee.DeleteEmployeeSO;
-import so.employee.GetAllEmployeesSO;
-import so.employee.LoginEmployeeSO;
-import so.employee.UpdateEmployeeSO;
+import so.apartmentfeatures.SOGetAllApartmentFeatures;
+import so.employee.SOAddEmployee;
+import so.employee.SODeleteEmployee;
+import so.employee.SOGetAllEmployees;
+import so.employee.SOLoginEmployee;
+import so.employee.SOUpdateEmployee;
+import so.listing.SOAddListing;
+import so.location.SOGetAllLocations;
 
 /**
  *
@@ -46,7 +52,7 @@ public class ServerController {
     }
 
     public Employee login(Employee employee) throws Exception {
-        LoginEmployeeSO loginEmployeeSo = new LoginEmployeeSO();
+        SOLoginEmployee loginEmployeeSo = new SOLoginEmployee();
         loginEmployeeSo.execute(employee);
         Employee e = loginEmployeeSo.getEmployee();
         System.out.println(e);
@@ -55,26 +61,43 @@ public class ServerController {
     }
 
     public void addEmployee(Employee employee) throws Exception  {
-        AddEmployeeSO addEmployeeSo = new AddEmployeeSO();
+        SOAddEmployee addEmployeeSo = new SOAddEmployee();
         addEmployeeSo.execute(employee);
 
     }
 
     public ArrayList<Employee> getAllEmployees() throws Exception {
-        GetAllEmployeesSO so = new GetAllEmployeesSO();
+        SOGetAllEmployees so = new SOGetAllEmployees();
         so.execute(null);
         ArrayList<Employee> list = so.getList();
         return list;
     }
 
     public void deleteEmployee(Employee e) throws Exception {
-        DeleteEmployeeSO deleteEmployeeSO = new DeleteEmployeeSO();
+        SODeleteEmployee deleteEmployeeSO = new SODeleteEmployee();
         deleteEmployeeSO.execute(e);
     }
 
     public void updateEmployee(Employee e) throws Exception{
-        UpdateEmployeeSO so = new UpdateEmployeeSO();
+        SOUpdateEmployee so = new SOUpdateEmployee();
         so.execute(e);
+    }
+
+    public ArrayList<Location> getAllLocations() throws Exception {
+        SOGetAllLocations so = new SOGetAllLocations();
+        so.execute(null);
+        return so.getList();
+    }
+
+    public ArrayList<ApartmentFeatures> getAllApartmentFeatures() throws Exception {
+        SOGetAllApartmentFeatures so = new SOGetAllApartmentFeatures();
+        so.execute(null);
+        return so.getList();
+    }
+
+    public void addListing(Listing listing) throws Exception {
+        SOAddListing so = new SOAddListing();
+        so.execute(listing);
     }
 
 }

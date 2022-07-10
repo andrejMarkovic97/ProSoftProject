@@ -14,11 +14,11 @@ import so.AbstractSO;
  *
  * @author Andrej
  */
-public class GetAllEmployeesSO extends AbstractSO{
+public class SOGetAllEmployees extends AbstractSO{
     private ArrayList<Employee> list;
     private final RepositoryEmployee storageEmployee;
 
-    public GetAllEmployeesSO() {
+    public SOGetAllEmployees() {
         storageEmployee = new RepositoryEmployee();
     }
 

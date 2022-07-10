@@ -13,11 +13,11 @@ import so.AbstractSO;
  *
  * @author Andrej
  */
-public class DeleteEmployeeSO extends AbstractSO {
+public class SODeleteEmployee extends AbstractSO {
 
     private final RepositoryEmployee storageEmployee;
 
-    public DeleteEmployeeSO() {
+    public SODeleteEmployee() {
         storageEmployee = new RepositoryEmployee();
     }
 

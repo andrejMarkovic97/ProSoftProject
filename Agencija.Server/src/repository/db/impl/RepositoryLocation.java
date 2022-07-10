@@ -7,7 +7,12 @@ package repository.db.impl;
 
 import domain.Location;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
+import repository.db.DBConnectionFactory;
 import repository.db.DBRepository;
 
 /**
@@ -22,7 +27,29 @@ public class RepositoryLocation implements DBRepository<Location, Long>{
   
     @Override
     public List<Location> getAll() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         try {
+            List<Location> locations = new ArrayList<>();
+            String query = "SELECT * FROM location";
+            connection = DBConnectionFactory.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+
+            while (rs.next()) {
+                Location l = new Location();
+                l.setLocationID(rs.getLong("LocationID"));
+                l.setCity(rs.getString("City"));
+                l.setNeighborhood(rs.getString("Neighborhood"));
+               locations.add(l);
+            }
+            rs.close();
+            statement.close();
+            System.out.println("Location list loaded successfully!");
+            return locations;
+        } catch (SQLException ex) {
+            System.out.println("Unsuccessful location list loading\n" + ex);
+            throw ex;
+
+        }
     }
 
     @Override
