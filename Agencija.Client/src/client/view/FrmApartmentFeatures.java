@@ -170,7 +170,7 @@ public class FrmApartmentFeatures extends javax.swing.JDialog {
             this.listing.setFeatureValues(new ArrayList<FeatureValue>());
         }
         this.listing.getFeatureValues().add(fv);
-        
+        fv.setListing(this.listing);
         if(af.getFeatureValues()==null){
             af.setFeatureValues(new ArrayList<FeatureValue>());
         }

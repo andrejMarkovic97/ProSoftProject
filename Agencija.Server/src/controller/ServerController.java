@@ -10,16 +10,8 @@ import domain.Employee;
 import domain.Listing;
 import domain.Location;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import repository.db.DBRepository;
-import repository.db.impl.RepositoryApartmentFeatures;
 import repository.db.impl.RepositoryEmployee;
-import repository.db.impl.RepositoryFeatureValue;
-import repository.db.impl.RepositoryListing;
-import repository.db.impl.RepositoryLocation;
-import repository.db.impl.RepositoryRental;
-import so.AbstractSO;
 import so.apartmentfeatures.SOGetAllApartmentFeatures;
 import so.employee.SOAddEmployee;
 import so.employee.SODeleteEmployee;
@@ -42,8 +34,6 @@ public class ServerController {
         storageEmployee = new RepositoryEmployee();
     }
 
-    
-
     public static ServerController getInstance() {
         if (instance == null) {
             instance = new ServerController();
@@ -60,7 +50,7 @@ public class ServerController {
         return loginEmployeeSo.getEmployee();
     }
 
-    public void addEmployee(Employee employee) throws Exception  {
+    public void addEmployee(Employee employee) throws Exception {
         SOAddEmployee addEmployeeSo = new SOAddEmployee();
         addEmployeeSo.execute(employee);
 
@@ -78,7 +68,7 @@ public class ServerController {
         deleteEmployeeSO.execute(e);
     }
 
-    public void updateEmployee(Employee e) throws Exception{
+    public void updateEmployee(Employee e) throws Exception {
         SOUpdateEmployee so = new SOUpdateEmployee();
         so.execute(e);
     }
@@ -98,6 +88,7 @@ public class ServerController {
     public void addListing(Listing listing) throws Exception {
         SOAddListing so = new SOAddListing();
         so.execute(listing);
+
     }
 
 }

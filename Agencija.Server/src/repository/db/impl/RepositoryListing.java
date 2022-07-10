@@ -23,12 +23,15 @@ import repository.db.DBRepository;
  *
  * @author Andrej
  */
-public class RepositoryListing implements DBRepository<Listing, Long>{
-  private Connection connection;
+public class RepositoryListing implements DBRepository<Listing, Long> {
+
+    private Connection connection;
+    private long id;
 
     public RepositoryListing() {
+
     }
-  
+
     @Override
     public List<Listing> getAll() throws Exception {
         try {
@@ -62,18 +65,26 @@ public class RepositoryListing implements DBRepository<Listing, Long>{
     }
 
     @Override
-    public void add(Listing l) throws IOException {
-           String query = "INSERT INTO Listing(PublicationDate,Price,AdditionalDescription,LocationID) VALUES(?,?,?,?)";
+    public void add(Listing l) throws IOException, Exception {
+        String query = "INSERT INTO Listing(PublicationDate,Price,AdditionalDescription,LocationID) VALUES(?,?,?,?)";
         try {
             System.out.println(query);
             connection = DBConnectionFactory.getInstance().getConnection();
+
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setDate(1, new Date(l.getPublicationDate().getTime()));
             statement.setInt(2, l.getPrice());
             statement.setString(3, l.getAdditionalDescription());
             statement.setLong(4, l.getLocation().getLocationID());
             statement.executeUpdate();
+
             System.out.println("Listing added");
+            ResultSet rs = statement.getGeneratedKeys();
+            if (rs.next()) {
+                id = rs.getLong(1);
+            }
+            RepositoryFeatureValue storageValues = new RepositoryFeatureValue();
+            storageValues.addFeatureValues(l.getFeatureValues(), id);
         } catch (SQLException ex) {
             ex.printStackTrace();
             System.out.println("Failure in adding employee");
@@ -95,5 +106,5 @@ public class RepositoryListing implements DBRepository<Listing, Long>{
     public Listing getById(Long k) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

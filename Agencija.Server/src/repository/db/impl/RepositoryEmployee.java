@@ -64,6 +64,7 @@ public class RepositoryEmployee implements DBRepository<Employee, Long> {
 
     @Override
     public void add(Employee e) throws IOException, SQLException {
+       
         String query = "INSERT INTO EMPLOYEE(FirstName,LastName,Role,Username,Password) VALUES(?,?,?,?,?)";
         try {
             System.out.println(query);
@@ -75,6 +76,7 @@ public class RepositoryEmployee implements DBRepository<Employee, Long> {
             statement.setString(4, e.getUsername());
             statement.setString(5, e.getPassword());
             statement.executeUpdate();
+            
             System.out.println("Employee added");
         } catch (SQLException ex) {
             ex.printStackTrace();
