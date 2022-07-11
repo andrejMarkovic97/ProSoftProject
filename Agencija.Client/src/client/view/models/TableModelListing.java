@@ -60,6 +60,9 @@ public class TableModelListing extends AbstractTableModel {
     public void fillTable() {
         try {
             list = ClientController.getInstance().getAllListings();
+            for (Listing listing : list) {
+                listing.setFeatureValues(ClientController.getInstance().getAllFeatureValues(listing.getListingID()));
+            }
             fireTableDataChanged();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -80,7 +83,7 @@ public class TableModelListing extends AbstractTableModel {
                     newList.add(l);
                 }
                 try {
-                    if (Integer.parseInt(param) >=l.getPrice()) {
+                    if (Integer.parseInt(param) >= l.getPrice()) {
                         newList.add(l);
                     }
                 } catch (NumberFormatException nbfe) {
@@ -103,5 +106,9 @@ public class TableModelListing extends AbstractTableModel {
         return l;
     }
 
-  
+    public void addListing(Listing listing) {
+        list.add(listing);
+        fireTableDataChanged();
+    }
+
 }

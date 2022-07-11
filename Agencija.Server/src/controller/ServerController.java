@@ -21,6 +21,7 @@ import so.employee.SOLoginEmployee;
 import so.employee.SOUpdateEmployee;
 import so.featurevalues.SOGetAllFeatureValues;
 import so.listing.SOAddListing;
+import so.listing.SODeleteListing;
 import so.listing.SOGetAllListings;
 import so.location.SOGetAllLocations;
 import so.listing.SOUpdateListing;
@@ -109,6 +110,11 @@ public class ServerController {
 
     public void updateListing(Listing l) throws Exception {
         SOUpdateListing so = new SOUpdateListing();
+        so.execute(l);
+    }
+
+    public void deleteListing(Listing l) throws Exception {
+        SODeleteListing so = new SODeleteListing();
         so.execute(l);
     }
 

@@ -175,4 +175,14 @@ public class ClientController {
             throw response.getException();
         }
     }
+
+    public void deleteListing(Listing delListing) throws Exception{
+        Request request = new Request(Operations.DELETE_LISTING, delListing);
+        Response response = Communication.getInstance().sendRequest(request);
+        if (response.getResponseType().equals(ResponseType.SUCCESS)) {
+            System.out.println("Listing successfully deleted!");
+        } else {
+            throw response.getException();
+        }
+    }
 }

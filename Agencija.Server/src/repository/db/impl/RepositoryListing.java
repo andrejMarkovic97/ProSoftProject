@@ -98,10 +98,10 @@ public class RepositoryListing implements DBRepository<Listing, Long> {
     @Override
     public void edit(Listing t) throws IOException {
         try {
-            String sql = "UPDATE LISTING SET price ="+t.getPrice()+""
-                    + ", AdditionalDescription='"+t.getAdditionalDescription()+"',"
-                    + " LocationID="+t.getLocation().getLocationID()+""
-                    + " WHERE ListingID="+t.getListingID();
+            String sql = "UPDATE LISTING SET price =" + t.getPrice() + ""
+                    + ", AdditionalDescription='" + t.getAdditionalDescription() + "',"
+                    + " LocationID=" + t.getLocation().getLocationID() + ""
+                    + " WHERE ListingID=" + t.getListingID();
             System.out.println(sql);
             connection = DBConnectionFactory.getInstance().getConnection();
             Statement statement = connection.prepareStatement(sql);
@@ -110,13 +110,23 @@ public class RepositoryListing implements DBRepository<Listing, Long> {
             System.out.println("Successfully updated listing");
         } catch (SQLException ex) {
             ex.printStackTrace();
-            System.out.println("Unsuccessfully updated listing, Error :"+ex.getMessage());
+            System.out.println("Unsuccessfully updated listing, Error :" + ex.getMessage());
         }
     }
 
     @Override
-    public void delete(Listing t) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void delete(Listing t) throws IOException {
+        String sql = "DELETE FROM LISTING WHERE ListingID=" + t.getListingID();
+
+        try {
+            connection = DBConnectionFactory.getInstance().getConnection();
+            Statement statement = connection.prepareStatement(sql);
+            statement.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(RepositoryListing.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Listing unsuccessfully deleted, Error: " + ex.getMessage());
+        }
+        System.out.println("Listing successfully deleted");
     }
 
     @Override

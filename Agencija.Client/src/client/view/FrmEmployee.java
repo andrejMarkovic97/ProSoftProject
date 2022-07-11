@@ -312,7 +312,8 @@ public class FrmEmployee extends javax.swing.JFrame {
             TableModelEmployee tbl = (TableModelEmployee) tblEmployee.getModel();
             try {
                 tbl.delete(row);
-                JOptionPane.showMessageDialog(this, "Employee successfully deleted!");
+                JOptionPane.showMessageDialog(this, "Uspješno brisanje zaposlenog");
+                tbl.fillTable();
             } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", HEIGHT);

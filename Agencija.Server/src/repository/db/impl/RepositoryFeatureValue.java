@@ -57,10 +57,10 @@ public class RepositoryFeatureValue implements DBRepository<FeatureValue, Long> 
 
     @Override
     public void edit(FeatureValue t) throws Exception {
-          try {
-            String sql = "UPDATE FEATUREVALUE SET Value='"+t.getValue()+"'"
-                    + "WHERE ListingID="+t.getListing().getListingID()+""
-                    + " AND FeatureID="+t.getAppFeatures().getFeatureID();
+        try {
+            String sql = "UPDATE FEATUREVALUE SET Value='" + t.getValue() + "'"
+                    + "WHERE ListingID=" + t.getListing().getListingID() + ""
+                    + " AND FeatureID=" + t.getAppFeatures().getFeatureID();
             System.out.println(sql);
             connection = DBConnectionFactory.getInstance().getConnection();
             Statement statement = connection.prepareStatement(sql);
@@ -69,13 +69,21 @@ public class RepositoryFeatureValue implements DBRepository<FeatureValue, Long> 
             System.out.println("Successfully updated Feature value");
         } catch (SQLException ex) {
             ex.printStackTrace();
-            System.out.println("Unsuccessfully updated feature value, Error :"+ex.getMessage());
+            System.out.println("Unsuccessfully updated feature value, Error :" + ex.getMessage());
         }
     }
 
     @Override
-    public void delete(FeatureValue t) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void delete(FeatureValue t) throws IOException {
+        String sql = "DELETE FROM FEATUREVALUE WHERE ListingID=" + t.getListing().getListingID();
+        System.out.println(sql);
+        try {
+            connection = DBConnectionFactory.getInstance().getConnection();
+            Statement statement = connection.prepareStatement(sql);
+            statement.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(RepositoryFeatureValue.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

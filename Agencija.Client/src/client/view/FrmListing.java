@@ -11,6 +11,8 @@ import client.view.models.TableModelListing;
 import domain.Listing;
 
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -101,6 +103,11 @@ public class FrmListing extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblListing);
 
         btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         btnDetails.setText("Details");
         btnDetails.addActionListener(new java.awt.event.ActionListener() {
@@ -286,8 +293,11 @@ public class FrmListing extends javax.swing.JFrame {
         try {
             ClientController.getInstance().addListing(listing);
             JOptionPane.showMessageDialog(this, "Listing successfully added!");
+            TableModelListing model = (TableModelListing) tblListing.getModel();
+            model.fillTable();
             txtDescription.setText("");
             txtPrice.setText("");
+            
             listing = null;
             
         } catch (Exception ex) {
@@ -295,7 +305,7 @@ public class FrmListing extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         
-        fillTable();
+       
 
     }//GEN-LAST:event_btnSubmitActionPerformed
 
@@ -343,6 +353,31 @@ public class FrmListing extends javax.swing.JFrame {
         txtSearch.setText("");
         tbl.fillTable();
     }//GEN-LAST:event_btnResetSearchActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+         int row = tblListing.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Nijedan oglas nije izabran!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int option = JOptionPane.showConfirmDialog(this, "Da li ste sigurni da zelite ovaj oglas obrisati?", "Confirm deletion", JOptionPane.YES_NO_OPTION);
+
+        if (option == JOptionPane.NO_OPTION) {
+            return;
+        }
+        if (option == JOptionPane.YES_OPTION) {
+            TableModelListing model = (TableModelListing) tblListing.getModel();
+            Listing delListing = model.getListingAtRow(row);
+             try {
+                 System.out.println(delListing.getFeatureValues());
+                 ClientController.getInstance().deleteListing(delListing);
+                 JOptionPane.showMessageDialog(this, "Uspjesno brisanje oglasa!");
+                 model.fillTable();
+             } catch (Exception ex) {
+                    Logger.getLogger(FrmListing.class.getName()).log(Level.SEVERE, null, ex);
+             }
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments

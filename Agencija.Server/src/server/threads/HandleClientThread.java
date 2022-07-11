@@ -73,6 +73,8 @@ public class HandleClientThread extends Thread {
                 return getAllFeatureValues(request);
             case Operations.UPDATE_LISTING:
                 return updateListing(request);
+            case Operations.DELETE_LISTING:
+                return deleteListing(request);
         }
         return null;
     }
@@ -261,6 +263,22 @@ public class HandleClientThread extends Thread {
             response.setResponseType(ResponseType.ERROR);
             response.setException(ex);
         }
+        return response;
+    }
+
+    private Response deleteListing(Request request) {
+        Response response = new Response();
+
+        Listing l =  (Listing) request.getArgument();
+        try {
+            ServerController.getInstance().deleteListing(l);
+            response.setResponseType(ResponseType.SUCCESS);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setResponseType(ResponseType.ERROR);
+            response.setException(ex);
+        }
+
         return response;
     }
 
