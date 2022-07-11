@@ -71,25 +71,6 @@ public class TableModelEmployee extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    public void setParam(String param) throws Exception {
-
-        ArrayList<Employee> newList = new ArrayList<>();
-        if (!param.equals("")) {
-            for (Employee employee : list) {
-                if (employee.getFirstName().toLowerCase().contains(param.toLowerCase())
-                        || employee.getLastName().contains(param.toLowerCase())) {
-                    newList.add(employee);
-                }
-            }
-            if (newList.isEmpty()) {
-                throw new Exception("Sistem ne može da pronađe zaposlene po zadatim vrijednostima");
-            }
-            list = newList;
-
-        }
-
-    }
-
     public void delete(int row) throws Exception {
         Employee e = list.get(row);
         try {
@@ -107,7 +88,6 @@ public class TableModelEmployee extends AbstractTableModel {
     }
 
     public void search(String param) throws Exception {
-        list = ClientController.getInstance().getAllEmployees();
         ArrayList<Employee> newList = new ArrayList<>();
         if (!param.equals("")) {
             for (Employee employee : list) {

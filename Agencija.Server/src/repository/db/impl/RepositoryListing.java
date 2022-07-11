@@ -52,13 +52,14 @@ public class RepositoryListing implements DBRepository<Listing, Long> {
                 loc.setCity(rs.getString("City"));
                 loc.setNeighborhood(rs.getString("Neighborhood"));
                 l.setLocation(loc);
+                listings.add(l);
             }
             rs.close();
             statement.close();
-            System.out.println("Employee list loaded successfully!");
+            System.out.println("Listing list loaded successfully!");
             return listings;
         } catch (SQLException ex) {
-            System.out.println("Unsuccessful employee list loading\n" + ex);
+            System.out.println("Unsuccessful listing list loading\n" + ex.getMessage());
             throw ex;
 
         }

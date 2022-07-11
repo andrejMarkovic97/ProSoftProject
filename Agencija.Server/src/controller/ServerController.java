@@ -7,6 +7,7 @@ package controller;
 
 import domain.ApartmentFeatures;
 import domain.Employee;
+import domain.FeatureValue;
 import domain.Listing;
 import domain.Location;
 import java.util.ArrayList;
@@ -18,7 +19,9 @@ import so.employee.SODeleteEmployee;
 import so.employee.SOGetAllEmployees;
 import so.employee.SOLoginEmployee;
 import so.employee.SOUpdateEmployee;
+import so.featurevalues.SOGetAllFeatureValues;
 import so.listing.SOAddListing;
+import so.listing.SOGetAllListings;
 import so.location.SOGetAllLocations;
 
 /**
@@ -89,6 +92,18 @@ public class ServerController {
         SOAddListing so = new SOAddListing();
         so.execute(listing);
 
+    }
+
+    public ArrayList<Listing> getAllListings() throws Exception {
+        SOGetAllListings so = new SOGetAllListings();
+        so.execute(null);
+        return so.getList();
+    }
+
+    public ArrayList<FeatureValue> getAllFeatureValues(long id) throws Exception {
+        SOGetAllFeatureValues so = new SOGetAllFeatureValues();
+        so.execute(id);
+        return so.getList();
     }
 
 }

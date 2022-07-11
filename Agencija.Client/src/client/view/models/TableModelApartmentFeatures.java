@@ -60,7 +60,7 @@ public class TableModelApartmentFeatures extends AbstractTableModel {
                         }
                     }
                 } else {
-                    return "No value yet assigned";
+                    return "No value assigned";
                 }
             default:
                 return "return!";
@@ -97,4 +97,36 @@ public class TableModelApartmentFeatures extends AbstractTableModel {
     public void setListing(Listing listing) {
         this.listing = listing;
     }
+
+//    public void fillTableWithListingID(long listingID) throws Exception {
+//        list = ClientController.getInstance().getAllApartmentFeatures();
+//        ArrayList<FeatureValue> featureValues = ClientController.getInstance().getAllFeatureValues(listing.getListingID());
+//        for (FeatureValue fv : featureValues) {
+//            fv.setListing(listing);
+//        }
+//        listing.setFeatureValues(featureValues);
+//        
+//    }
+
+    public void fillTableWithListingFeatureValueDetails() throws Exception {
+        list = ClientController.getInstance().getAllApartmentFeatures();
+        for (ApartmentFeatures af : list) {
+            for (FeatureValue featureValue : listing.getFeatureValues()) {
+                System.out.println("Listing ID "+featureValue.getListing().getListingID());
+                if(featureValue.getAppFeatures().getFeatureID()==af.getFeatureID()){
+                    if(af.getFeatureValues()==null){
+                        af.setFeatureValues(new ArrayList<>());
+                    }
+                    af.getFeatureValues().add(featureValue);
+                    System.out.println(af.getFeatureID()+" "+featureValue.getAppFeatures().getFeatureID());
+                }
+            }
+        }
+        fireTableDataChanged();
+    }
+
+    public void setList(ArrayList<ApartmentFeatures> list) {
+        this.list = list;
+    }
+
 }

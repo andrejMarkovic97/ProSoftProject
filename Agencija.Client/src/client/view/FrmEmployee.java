@@ -288,8 +288,7 @@ public class FrmEmployee extends javax.swing.JFrame {
             boolean success = ClientController.getInstance().addEmployee(employee);
             if (success) {
                 JOptionPane.showMessageDialog(this, "Employee successfully added!");
-                TableModelEmployee et = (TableModelEmployee) tblEmployee.getModel();
-                et.add(employee);
+                fillEmployeeTable();
 
             }
 

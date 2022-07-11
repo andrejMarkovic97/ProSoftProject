@@ -12,6 +12,7 @@ import communication.Response;
 import communication.ResponseType;
 import domain.ApartmentFeatures;
 import domain.Employee;
+import domain.FeatureValue;
 import domain.Listing;
 import domain.Location;
 import domain.Rental;
@@ -140,5 +141,34 @@ public class ClientController {
         } else {
             throw response.getException();
         }
+    }
+
+    public ArrayList<Listing> getAllListings() throws Exception {
+        ArrayList<Listing> listings = new ArrayList<>();
+        Request request = new Request(Operations.GET_ALL_LISTINGS, null);
+        Response response = Communication.getInstance().sendRequest(request);
+        if (response.getResponseType().equals(ResponseType.SUCCESS)) {
+            listings = (ArrayList<Listing>) response.getResult();
+            System.out.println("Listings successfully retrieved");
+        } else {
+            throw response.getException();
+        }
+        return listings;
+    }
+
+    public ArrayList<FeatureValue> getAllFeatureValues(long listingID) throws Exception {
+        ArrayList<FeatureValue> featureValues = new ArrayList<>();
+        Request request = new Request(Operations.GET_ALL_FEATURE_VALUES, listingID);
+        Response response = Communication.getInstance().sendRequest(request);
+        if (response.getResponseType().equals(ResponseType.SUCCESS)) {
+            featureValues = (ArrayList<FeatureValue>) response.getResult();
+            System.out.println("Feature values successfully retrieved");
+            for (FeatureValue featureValue : featureValues) {
+                System.out.println(featureValue);
+            }
+        } else {
+            throw response.getException();
+        }
+        return featureValues;
     }
 }

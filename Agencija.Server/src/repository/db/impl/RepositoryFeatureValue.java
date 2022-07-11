@@ -5,10 +5,12 @@
  */
 package repository.db.impl;
 
+import domain.ApartmentFeatures;
 import domain.FeatureValue;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -91,4 +93,34 @@ public class RepositoryFeatureValue implements DBRepository<FeatureValue, Long> 
         }
     }
 
+    public ArrayList<FeatureValue> getAllByID(long id) throws IOException, SQLException {
+        String query = "SELECT * FROM featurevalue fv JOIN apartmentfeatures af"
+                + " ON (fv.featureid = af.featureid) WHERE listingid =" + id;
+        System.out.println(query);
+        try {
+            ArrayList<FeatureValue> features = new ArrayList<>();
+
+            connection = DBConnectionFactory.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+
+            while (rs.next()) {
+                FeatureValue fv = new FeatureValue();
+                ApartmentFeatures at = new ApartmentFeatures();
+                at.setFeatureID(rs.getLong("FeatureID"));
+                at.setFeatureName(rs.getString("FeatureName"));
+                fv.setAppFeatures(at);
+                fv.setValue(rs.getString("Value"));
+                features.add(fv);
+            }
+            rs.close();
+            statement.close();
+            System.out.println("feature value list loaded successfully!");
+            return features;
+        } catch (SQLException ex) {
+            System.out.println("Unsuccessful features list loading\n" + ex.getMessage());
+            throw ex;
+
+        }
+    }
 }

@@ -14,6 +14,7 @@ import communication.ResponseType;
 import controller.ServerController;
 import domain.ApartmentFeatures;
 import domain.Employee;
+import domain.FeatureValue;
 import domain.Listing;
 import domain.Location;
 import java.io.ObjectInputStream;
@@ -66,6 +67,10 @@ public class HandleClientThread extends Thread {
                 return getAllApartmentFeatures(request);
             case Operations.ADD_LISTING:
                 return addListing(request);
+            case Operations.GET_ALL_LISTINGS:
+                return getAllListings(request);
+            case Operations.GET_ALL_FEATURE_VALUES:
+                return getAllFeatureValues(request);
         }
         return null;
     }
@@ -203,6 +208,41 @@ public class HandleClientThread extends Thread {
             ex.printStackTrace();
             response.setResponseType(ResponseType.ERROR);
             response.setException(ex);
+        }
+        return response;
+    }
+
+    private Response getAllListings(Request request) {
+        Response response = new Response();
+        try {
+
+            ArrayList<Listing> list = ServerController.getInstance().getAllListings();
+            System.out.println("Listings successfully fetched!");
+            response.setResponseType(ResponseType.SUCCESS);
+            response.setResult(list);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setResponseType(ResponseType.ERROR);
+            response.setException(ex);
+
+        }
+        return response;
+    }
+
+    private Response getAllFeatureValues(Request request) {
+        Response response = new Response();
+        long id = (long) request.getArgument();
+        try {
+
+            ArrayList<FeatureValue> list = ServerController.getInstance().getAllFeatureValues(id);
+            System.out.println("Feature values successfully fetched!");
+            response.setResponseType(ResponseType.SUCCESS);
+            response.setResult(list);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setResponseType(ResponseType.ERROR);
+            response.setException(ex);
+
         }
         return response;
     }

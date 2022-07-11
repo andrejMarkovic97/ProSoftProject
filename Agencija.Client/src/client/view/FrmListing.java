@@ -6,17 +6,11 @@
 package client.view;
 
 import client.controller.ClientController;
-import domain.ApartmentFeatures;
-import domain.FeatureValue;
+import client.view.models.TableModelListing;
+
 import domain.Listing;
-import domain.Location;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
+
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -33,6 +27,9 @@ public class FrmListing extends javax.swing.JFrame {
     public FrmListing() {
         initComponents();
         setLocationRelativeTo(null);
+        TableModelListing model = new TableModelListing();
+        tblListing.setModel(model);
+        fillTable();
     }
 
     /**
@@ -51,7 +48,7 @@ public class FrmListing extends javax.swing.JFrame {
         btnSubmit = new javax.swing.JButton();
         btnDiscard = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        txtSearchEmployee = new javax.swing.JTextField();
+        txtSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblListing = new javax.swing.JTable();
         btnEdit = new javax.swing.JButton();
@@ -64,6 +61,8 @@ public class FrmListing extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDescription = new javax.swing.JTextArea();
         btnAddAppFeatures = new javax.swing.JButton();
+        btnSearch = new javax.swing.JButton();
+        btnResetSearch = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,6 +106,11 @@ public class FrmListing extends javax.swing.JFrame {
         btnDelete.setText("Delete");
 
         btnDetails.setText("Details");
+        btnDetails.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDetailsActionPerformed(evt);
+            }
+        });
 
         txtPrice.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
 
@@ -132,6 +136,13 @@ public class FrmListing extends javax.swing.JFrame {
             }
         });
 
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -153,41 +164,45 @@ public class FrmListing extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtPrice)
-                                    .addComponent(btnLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnAddAppFeatures, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)))))
+                                    .addComponent(btnLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                                    .addComponent(btnAddAppFeatures, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnDiscard)
                                 .addGap(57, 57, 57)
                                 .addComponent(btnSubmit))
-                            .addComponent(jScrollPane2))))
-                .addGap(18, 25, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 50, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(48, 48, 48)
-                        .addComponent(btnDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtSearchEmployee))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSearch)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel7)
-                    .addComponent(txtSearchEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -196,7 +211,8 @@ public class FrmListing extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnDelete)
                             .addComponent(btnEdit)
-                            .addComponent(btnDetails)))
+                            .addComponent(btnDetails))
+                        .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
@@ -220,19 +236,33 @@ public class FrmListing extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnSubmit)
                             .addComponent(btnDiscard))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
+
+        btnResetSearch.setText("Reset search");
+        btnResetSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetSearchActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnResetSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(148, 148, 148))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnResetSearch)
+                .addContainerGap())
         );
 
         pack();
@@ -261,8 +291,7 @@ public class FrmListing extends javax.swing.JFrame {
         listing.setPrice(Integer.parseInt(txtPrice.getText()));
         listing.setAdditionalDescription(txtDescription.getText());
         listing.setPublicationDate(new Date());
-        
-        
+
         try {
             ClientController.getInstance().addListing(listing);
             JOptionPane.showMessageDialog(this, "Listing successfully added!");
@@ -270,7 +299,8 @@ public class FrmListing extends javax.swing.JFrame {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
+        
+        fillTable();
 
     }//GEN-LAST:event_btnSubmitActionPerformed
 
@@ -289,6 +319,36 @@ public class FrmListing extends javax.swing.JFrame {
         frm.setVisible(true);
     }//GEN-LAST:event_btnAddAppFeaturesActionPerformed
 
+    private void btnDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailsActionPerformed
+        int row = tblListing.getSelectedRow();
+        if(row<0){
+            JOptionPane.showMessageDialog(this, "Sistem ne može da učita oglas", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        TableModelListing model = (TableModelListing) tblListing.getModel();
+        Listing l = model.getListingAtRow(row);
+        FrmDetailsListing frm = new FrmDetailsListing(l);
+        frm.setVisible(true);
+    }//GEN-LAST:event_btnDetailsActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        String param = txtSearch.getText();
+        TableModelListing tbl = (TableModelListing) tblListing.getModel();
+        try {
+            tbl.search(param);
+            JOptionPane.showMessageDialog(this, "Sistem je pronašao oglase po zadatim kriterijumima");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnResetSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetSearchActionPerformed
+        TableModelListing tbl = (TableModelListing) tblListing.getModel();
+        txtSearch.setText("");
+        tbl.fillTable();
+    }//GEN-LAST:event_btnResetSearchActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -300,6 +360,8 @@ public class FrmListing extends javax.swing.JFrame {
     private javax.swing.JButton btnDiscard;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnLocation;
+    private javax.swing.JButton btnResetSearch;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnSubmit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -313,11 +375,16 @@ public class FrmListing extends javax.swing.JFrame {
     private javax.swing.JTable tblListing;
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JFormattedTextField txtPrice;
-    private javax.swing.JTextField txtSearchEmployee;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 
     public void setListing(Listing listing) {
         this.listing = listing;
+    }
+
+    private void fillTable() {
+        TableModelListing model = (TableModelListing) tblListing.getModel();
+        model.fillTable();
     }
 
 }
