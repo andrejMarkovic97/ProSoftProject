@@ -166,10 +166,10 @@ public class FrmApartmentFeatures extends javax.swing.JDialog {
             System.out.println("Listing is null");
             return;
         }
-        if(this.listing.getFeatureValues()==null){
+        if(listing.getFeatureValues()==null){
             this.listing.setFeatureValues(new ArrayList<FeatureValue>());
         }
-        this.listing.getFeatureValues().add(fv);
+          this.listing.getFeatureValues().add(fv);
         fv.setListing(this.listing);
         if(af.getFeatureValues()==null){
             af.setFeatureValues(new ArrayList<FeatureValue>());

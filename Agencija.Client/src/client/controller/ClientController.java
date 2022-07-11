@@ -15,9 +15,6 @@ import domain.Employee;
 import domain.FeatureValue;
 import domain.Listing;
 import domain.Location;
-import domain.Rental;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -163,12 +160,19 @@ public class ClientController {
         if (response.getResponseType().equals(ResponseType.SUCCESS)) {
             featureValues = (ArrayList<FeatureValue>) response.getResult();
             System.out.println("Feature values successfully retrieved");
-            for (FeatureValue featureValue : featureValues) {
-                System.out.println(featureValue);
-            }
         } else {
             throw response.getException();
         }
         return featureValues;
+    }
+
+    public void updateListing(Listing listing) throws Exception {
+        Request request = new Request(Operations.UPDATE_LISTING, listing);
+        Response response = Communication.getInstance().sendRequest(request);
+        if (response.getResponseType().equals(ResponseType.SUCCESS)) {
+            System.out.println("Listing successfully updated!");
+        } else {
+            throw response.getException();
+        }
     }
 }

@@ -8,22 +8,26 @@ package client.view;
 import domain.ApartmentFeatures;
 import domain.FeatureValue;
 import domain.Listing;
+import java.util.ArrayList;
 
 /**
  *
  * @author Andrej
  */
 public class FrmFeatureValues extends javax.swing.JDialog {
+
     ApartmentFeatures af;
     FrmApartmentFeatures frmAf;
     Listing listing;
+    private FrmDetailsListing frmDetailsListing = null;
+
     /**
      * Creates new form FrmFeatureValues
      */
-    public FrmFeatureValues(ApartmentFeatures af,FrmApartmentFeatures frmAf, Listing listing) {
-        this.af=af;
-        this.frmAf=frmAf;
-        this.listing=listing;
+    public FrmFeatureValues(ApartmentFeatures af, FrmApartmentFeatures frmAf, Listing listing) {
+        this.af = af;
+        this.frmAf = frmAf;
+        this.listing = listing;
         setLocationRelativeTo(null);
         initComponents();
         lblFeature.setText(af.getFeatureName());
@@ -101,16 +105,55 @@ public class FrmFeatureValues extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-        FeatureValue fv = new FeatureValue();
-        fv.setAppFeatures(af);
-        fv.setListing(listing);
-        fv.setValue(txtFeatureValue.getText());
-        
-        frmAf.addFeatureValue(listing,af,fv);
-        this.dispose();
+
+        if (frmAf != null) {
+            FeatureValue fv = new FeatureValue();
+            fv.setAppFeatures(af);
+            fv.setListing(listing);
+            fv.setValue(txtFeatureValue.getText());
+            frmAf.addFeatureValue(listing, af, fv);
+            frmAf = null;
+            listing = null;
+            this.dispose();
+        }
+        if (frmDetailsListing != null) {
+            boolean exist = false;
+            if (af.getFeatureValues() != null) {
+                for (FeatureValue featureValue : af.getFeatureValues()) {
+                    if (featureValue.getAppFeatures().getFeatureID() == af.getFeatureID()
+                            && featureValue.getListing().getListingID() == listing.getListingID()) {
+                        featureValue.setValue(txtFeatureValue.getText());
+                        exist = true;
+                    }
+                }
+                if (exist == false) {
+                    FeatureValue fv = new FeatureValue();
+                    fv.setAppFeatures(af);
+                    fv.setListing(listing);
+                    fv.setValue(txtFeatureValue.getText());
+                    listing.getFeatureValues().add(fv);
+                    af.getFeatureValues().add(fv);
+
+                }
+            } else {
+                af.setFeatureValues(new ArrayList<>());
+                FeatureValue fv = new FeatureValue();
+                fv.setAppFeatures(af);
+                fv.setListing(listing);
+                fv.setValue(txtFeatureValue.getText());
+                listing.getFeatureValues().add(fv);
+                af.getFeatureValues().add(fv);
+            }
+
+            frmDetailsListing.addApartmentFeature(af);
+            setFrmDetailsListing(null);
+            this.dispose();
+            frmDetailsListing = null;
+            listing = null;
+
+        }
     }//GEN-LAST:event_btnSubmitActionPerformed
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -118,4 +161,8 @@ public class FrmFeatureValues extends javax.swing.JDialog {
     private javax.swing.JLabel lblFeature;
     private javax.swing.JTextField txtFeatureValue;
     // End of variables declaration//GEN-END:variables
+
+    public void setFrmDetailsListing(FrmDetailsListing frmDetailsListing) {
+        this.frmDetailsListing = frmDetailsListing;
+    }
 }

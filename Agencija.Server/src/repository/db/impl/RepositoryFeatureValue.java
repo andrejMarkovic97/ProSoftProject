@@ -7,6 +7,7 @@ package repository.db.impl;
 
 import domain.ApartmentFeatures;
 import domain.FeatureValue;
+import domain.Listing;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -56,7 +57,20 @@ public class RepositoryFeatureValue implements DBRepository<FeatureValue, Long> 
 
     @Override
     public void edit(FeatureValue t) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+          try {
+            String sql = "UPDATE FEATUREVALUE SET Value='"+t.getValue()+"'"
+                    + "WHERE ListingID="+t.getListing().getListingID()+""
+                    + " AND FeatureID="+t.getAppFeatures().getFeatureID();
+            System.out.println(sql);
+            connection = DBConnectionFactory.getInstance().getConnection();
+            Statement statement = connection.prepareStatement(sql);
+
+            statement.executeUpdate(sql);
+            System.out.println("Successfully updated Feature value");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.out.println("Unsuccessfully updated feature value, Error :"+ex.getMessage());
+        }
     }
 
     @Override
@@ -110,6 +124,9 @@ public class RepositoryFeatureValue implements DBRepository<FeatureValue, Long> 
                 at.setFeatureID(rs.getLong("FeatureID"));
                 at.setFeatureName(rs.getString("FeatureName"));
                 fv.setAppFeatures(at);
+                Listing listing = new Listing();
+                listing.setListingID(rs.getLong("ListingID"));
+                fv.setListing(listing);
                 fv.setValue(rs.getString("Value"));
                 features.add(fv);
             }

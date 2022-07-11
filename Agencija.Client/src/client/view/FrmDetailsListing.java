@@ -7,6 +7,7 @@ package client.view;
 
 import client.controller.ClientController;
 import client.view.models.TableModelApartmentFeatures;
+import domain.ApartmentFeatures;
 import domain.FeatureValue;
 import domain.Listing;
 import domain.Location;
@@ -37,6 +38,11 @@ public class FrmDetailsListing extends javax.swing.JDialog {
         getFeatureValues();
         model.setListing(listing);
         fillTable();
+        txtPrice.setEditable(false);
+        txtDescription.setEditable(false);
+        btnInsert.setEnabled(false);
+        btnSubmit.setEnabled(false);
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -60,7 +66,7 @@ public class FrmDetailsListing extends javax.swing.JDialog {
         jPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblFeatureValues = new javax.swing.JTable();
-        btnExit = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
         btnSubmit = new javax.swing.JButton();
         btnInsert = new javax.swing.JButton();
 
@@ -97,11 +103,26 @@ public class FrmDetailsListing extends javax.swing.JDialog {
         ));
         jScrollPane2.setViewportView(tblFeatureValues);
 
-        btnExit.setText("Exit");
+        btnEdit.setText("Edit");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
 
         btnSubmit.setText("Submit");
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
 
         btnInsert.setText("Insert feature value");
+        btnInsert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelLayout = new javax.swing.GroupLayout(jPanel);
         jPanel.setLayout(jPanelLayout);
@@ -112,7 +133,7 @@ public class FrmDetailsListing extends javax.swing.JDialog {
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelLayout.createSequentialGroup()
-                        .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(46, 46, 46)
                         .addComponent(btnInsert)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -125,7 +146,7 @@ public class FrmDetailsListing extends javax.swing.JDialog {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnExit)
+                    .addComponent(btnEdit)
                     .addComponent(btnSubmit)
                     .addComponent(btnInsert))
                 .addGap(21, 21, 21))
@@ -186,9 +207,57 @@ public class FrmDetailsListing extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        txtPrice.setEditable(true);
+        txtDescription.setEditable(true);
+        btnInsert.setEnabled(true);
+        btnSubmit.setEnabled(true);
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
+        int row = tblFeatureValues.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Izaberite odgovarajucu karakteristiku", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        TableModelApartmentFeatures model = (TableModelApartmentFeatures) tblFeatureValues.getModel();
+        ApartmentFeatures af = model.getApartmentFeature(row);
+        FrmFeatureValues frm = new FrmFeatureValues(af, null, listing);
+        frm.setFrmDetailsListing(this);
+        frm.setVisible(true);
+    }//GEN-LAST:event_btnInsertActionPerformed
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        int option = JOptionPane.showConfirmDialog(this, "Da li sigurno zelis ove promjene izvrsiti?", "Confirm edit", JOptionPane.YES_NO_OPTION);
+
+        if (option == JOptionPane.NO_OPTION) {
+            return;
+        }
+
+        if (option == JOptionPane.YES_OPTION) {
+            try {
+                listing.setPrice(Integer.parseInt(txtPrice.getText()));
+                String city = (String) cmbCity.getSelectedItem();
+                String neighborhood = (String) cmbNeighborhood.getSelectedItem();
+                for (Location location : locations) {
+                    if(location.getCity().equals(city) && location.getNeighborhood().equals(neighborhood)){
+                        listing.setLocation(location);
+                    }
+                }
+                listing.setAdditionalDescription(txtDescription.getText());
+                ClientController.getInstance().updateListing(listing);
+                JOptionPane.showMessageDialog(this, "Uspješna izmjena oglasa");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnInsert;
     private javax.swing.JButton btnSubmit;
     private javax.swing.JComboBox<String> cmbCity;
@@ -238,8 +307,6 @@ public class FrmDetailsListing extends javax.swing.JDialog {
         cmbNeighborhood.setSelectedItem(listing.getLocation().getNeighborhood());
     }
 
-    
-
     public void setListing(Listing listing) {
         this.listing = listing;
     }
@@ -247,7 +314,7 @@ public class FrmDetailsListing extends javax.swing.JDialog {
     private void getFeatureValues() {
         try {
             ArrayList<FeatureValue> featureValues = ClientController.getInstance().getAllFeatureValues(listing.getListingID());
-            
+
             for (FeatureValue fv : featureValues) {
                 fv.setListing(listing);
             }
@@ -266,8 +333,9 @@ public class FrmDetailsListing extends javax.swing.JDialog {
         }
     }
 
-   
-
-    
+    void addApartmentFeature(ApartmentFeatures af) {
+        TableModelApartmentFeatures model = (TableModelApartmentFeatures) tblFeatureValues.getModel();
+        model.addApartmentFeature(af);
+    }
 
 }

@@ -16,6 +16,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import repository.db.DBConnectionFactory;
 import repository.db.DBRepository;
 
@@ -94,8 +96,22 @@ public class RepositoryListing implements DBRepository<Listing, Long> {
     }
 
     @Override
-    public void edit(Listing t) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void edit(Listing t) throws IOException {
+        try {
+            String sql = "UPDATE LISTING SET price ="+t.getPrice()+""
+                    + ", AdditionalDescription='"+t.getAdditionalDescription()+"',"
+                    + " LocationID="+t.getLocation().getLocationID()+""
+                    + " WHERE ListingID="+t.getListingID();
+            System.out.println(sql);
+            connection = DBConnectionFactory.getInstance().getConnection();
+            Statement statement = connection.prepareStatement(sql);
+
+            statement.executeUpdate(sql);
+            System.out.println("Successfully updated listing");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.out.println("Unsuccessfully updated listing, Error :"+ex.getMessage());
+        }
     }
 
     @Override

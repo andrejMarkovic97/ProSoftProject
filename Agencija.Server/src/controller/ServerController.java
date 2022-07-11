@@ -23,6 +23,7 @@ import so.featurevalues.SOGetAllFeatureValues;
 import so.listing.SOAddListing;
 import so.listing.SOGetAllListings;
 import so.location.SOGetAllLocations;
+import so.listing.SOUpdateListing;
 
 /**
  *
@@ -105,5 +106,12 @@ public class ServerController {
         so.execute(id);
         return so.getList();
     }
+
+    public void updateListing(Listing l) throws Exception {
+        SOUpdateListing so = new SOUpdateListing();
+        so.execute(l);
+    }
+
+    
 
 }
