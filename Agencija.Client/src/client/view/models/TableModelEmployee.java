@@ -61,7 +61,7 @@ public class TableModelEmployee extends AbstractTableModel {
     public void fillTable() {
         try {
             list = ClientController.getInstance().getAllEmployees();
-            ArrayList<Rental> rentals = new ArrayList<>();
+            ArrayList<Rental> rentals = ClientController.getInstance().getAllRentals();
             for (Employee employee : list) {
                 for (Rental rental : rentals) {
                     if(rental.getEmployee().getEmployeeID()==employee.getEmployeeID()){
@@ -84,6 +84,7 @@ public class TableModelEmployee extends AbstractTableModel {
     public void delete(int row) throws Exception {
         Employee e = list.get(row);
         try {
+            System.out.println(e.getRentals());
             ClientController.getInstance().deleteEmployee(e);
             list.remove(row);
             fireTableDataChanged();

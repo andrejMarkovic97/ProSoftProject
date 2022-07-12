@@ -292,7 +292,7 @@ public class FrmEmployee extends javax.swing.JFrame {
 
         if (txtFirstName.getText().isEmpty() || txtLastName.getText().isEmpty()
                 || txtUsername.getText().isEmpty() || txtPassword.getPassword().length == 0) {
-            JOptionPane.showMessageDialog(this, "All fields must be filled in before submitting!", "Submit error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Sistem ne moze da unese zaposlenog", "Submit error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         try {
@@ -305,7 +305,7 @@ public class FrmEmployee extends javax.swing.JFrame {
             employee.setRentals(new ArrayList<Rental>());
             boolean success = ClientController.getInstance().addEmployee(employee);
             if (success) {
-                JOptionPane.showMessageDialog(this, "Employee successfully added!");
+                JOptionPane.showMessageDialog(this, "Uspješno unošenje zaposlenog!");
                 fillEmployeeTable();
 
             }
@@ -334,7 +334,7 @@ public class FrmEmployee extends javax.swing.JFrame {
                 tbl.fillTable();
             } catch (Exception ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", HEIGHT);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnDeleteActionPerformed

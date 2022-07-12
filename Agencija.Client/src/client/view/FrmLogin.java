@@ -115,16 +115,22 @@ public class FrmLogin extends javax.swing.JFrame {
                 Employee e = new Employee();
                 e.setUsername(txtUsername.getText().trim());
                 e.setPassword(String.valueOf(txtPassword.getPassword()));
-
+                
+                if(!e.getUsername().isEmpty() && !e.getPassword().isEmpty()){
                 Employee employee = ClientController.getInstance().login(e);
+                
 
-//                 JOptionPane.showMessageDialog(this, "Welcome " + employee.getFirstName() + " " + employee.getLastName());
+        JOptionPane.showMessageDialog(this, "Uspjesno prijavljivanje!");
                 ClientController.getInstance().setCurrentEmployee(employee);
                 new FrmMain().setVisible(true);
                 this.dispose();
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Popunite sva polja prije predaje!");
+                }
             }
             else{
-                JOptionPane.showMessageDialog(this,"Please enter your credentials","Invalid credentials", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,"Doslo je do greske prilikom prijavljivanja","Invalid credentials", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (Exception ex) {
@@ -134,7 +140,7 @@ public class FrmLogin extends javax.swing.JFrame {
 
             } else {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Doslo je do greske prilikom prijavljivanja", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
 
