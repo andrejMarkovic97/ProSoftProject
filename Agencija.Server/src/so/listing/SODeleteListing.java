@@ -29,21 +29,18 @@ public class SODeleteListing extends AbstractSO {
 
     @Override
     protected void executeOperation(AbstractDomainObject ado) throws Exception {
-//        Listing l = (Listing) ado;
-//        
-//        if(l.getFeatureValues()!=null){
-//            for (FeatureValue featureValue : l.getFeatureValues()) {
-//                DBBroker.getInstance().delete(featureValue);
-//            }
-//        }
-//        
-//        if(l.getRentals()!=null){
-//            for (Rental rental : l.getRentals()) {
-//                DBBroker.getInstance().delete(rental);
-//            }
-//        }
-//        
+        Listing l = (Listing) ado;
+        
+        if(l.getFeatureValues()!=null){
+            DBBroker.getInstance().delete(l.getFeatureValues().get(0));
+        }
+        
+       if(l.getRentals()!=null){
+           DBBroker.getInstance().delete(l.getRentals().get(0));
+       }
+        
         DBBroker.getInstance().delete(ado);
+        
     }
 
 }

@@ -33,6 +33,9 @@ public class SODeleteEmployee extends AbstractSO {
     @Override
     protected void executeOperation(AbstractDomainObject ado) throws Exception {
         Employee e = (Employee) ado;
+        if(e.getRentals()!=null){
+            DBBroker.getInstance().delete(e.getRentals().get(0));
+        }
         DBBroker.getInstance().delete(ado);
     }
 }

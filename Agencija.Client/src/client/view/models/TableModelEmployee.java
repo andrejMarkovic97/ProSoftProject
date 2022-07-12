@@ -7,6 +7,7 @@ package client.view.models;
 
 import client.controller.ClientController;
 import domain.Employee;
+import domain.Rental;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,6 +61,15 @@ public class TableModelEmployee extends AbstractTableModel {
     public void fillTable() {
         try {
             list = ClientController.getInstance().getAllEmployees();
+            ArrayList<Rental> rentals = new ArrayList<>();
+            for (Employee employee : list) {
+                for (Rental rental : rentals) {
+                    if(rental.getEmployee().getEmployeeID()==employee.getEmployeeID()){
+                        employee.setRentals(new ArrayList<>());
+                        employee.getRentals().add(rental);
+                    }
+                }
+            }
             fireTableDataChanged();
         } catch (Exception ex) {
             Logger.getLogger(TableModelEmployee.class.getName()).log(Level.SEVERE, null, ex);
