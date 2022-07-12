@@ -25,6 +25,7 @@ public class FrmListing extends javax.swing.JFrame {
      * Creates new form FrmEmployee
      */
     private Listing listing;
+   private FrmRental frmRental;
 
     public FrmListing() {
         initComponents();
@@ -32,6 +33,8 @@ public class FrmListing extends javax.swing.JFrame {
         TableModelListing model = new TableModelListing();
         tblListing.setModel(model);
         fillTable();
+        btnSelectListing.setVisible(false);
+       
     }
 
     /**
@@ -64,6 +67,7 @@ public class FrmListing extends javax.swing.JFrame {
         btnAddAppFeatures = new javax.swing.JButton();
         btnSearch = new javax.swing.JButton();
         btnResetSearch = new javax.swing.JButton();
+        btnSelectListing = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -154,6 +158,14 @@ public class FrmListing extends javax.swing.JFrame {
             }
         });
 
+        btnSelectListing.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnSelectListing.setText("Select listing");
+        btnSelectListing.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSelectListingActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -204,6 +216,10 @@ public class FrmListing extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnSelectListing, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(162, 162, 162))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -223,7 +239,8 @@ public class FrmListing extends javax.swing.JFrame {
                             .addComponent(btnDelete)
                             .addComponent(btnDetails)
                             .addComponent(btnResetSearch))
-                        .addContainerGap())
+                        .addGap(20, 20, 20)
+                        .addComponent(btnSelectListing))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
@@ -297,15 +314,14 @@ public class FrmListing extends javax.swing.JFrame {
             model.fillTable();
             txtDescription.setText("");
             txtPrice.setText("");
-            
+
             listing = null;
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
-       
+
 
     }//GEN-LAST:event_btnSubmitActionPerformed
 
@@ -326,7 +342,7 @@ public class FrmListing extends javax.swing.JFrame {
 
     private void btnDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailsActionPerformed
         int row = tblListing.getSelectedRow();
-        if(row<0){
+        if (row < 0) {
             JOptionPane.showMessageDialog(this, "Sistem ne može da učita oglas", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -355,7 +371,7 @@ public class FrmListing extends javax.swing.JFrame {
     }//GEN-LAST:event_btnResetSearchActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-         int row = tblListing.getSelectedRow();
+        int row = tblListing.getSelectedRow();
         if (row < 0) {
             JOptionPane.showMessageDialog(this, "Nijedan oglas nije izabran!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -368,16 +384,28 @@ public class FrmListing extends javax.swing.JFrame {
         if (option == JOptionPane.YES_OPTION) {
             TableModelListing model = (TableModelListing) tblListing.getModel();
             Listing delListing = model.getListingAtRow(row);
-             try {
-                 System.out.println(delListing.getFeatureValues());
-                 ClientController.getInstance().deleteListing(delListing);
-                 JOptionPane.showMessageDialog(this, "Uspjesno brisanje oglasa!");
-                 model.fillTable();
-             } catch (Exception ex) {
-                    Logger.getLogger(FrmListing.class.getName()).log(Level.SEVERE, null, ex);
-             }
+            try {
+                System.out.println(delListing.getFeatureValues());
+                ClientController.getInstance().deleteListing(delListing);
+                JOptionPane.showMessageDialog(this, "Uspjesno brisanje oglasa!");
+                model.fillTable();
+            } catch (Exception ex) {
+                Logger.getLogger(FrmListing.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnSelectListingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectListingActionPerformed
+        int row = tblListing.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Nijedan oglas nije izabran!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        TableModelListing model = (TableModelListing) tblListing.getModel();
+        this.frmRental.setListing(model.getListingAtRow(row));
+        JOptionPane.showMessageDialog(this, "Oglas uspjesno izabran!");
+        this.dispose();
+    }//GEN-LAST:event_btnSelectListingActionPerformed
 
     /**
      * @param args the command line arguments
@@ -391,6 +419,7 @@ public class FrmListing extends javax.swing.JFrame {
     private javax.swing.JButton btnLocation;
     private javax.swing.JButton btnResetSearch;
     private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnSelectListing;
     private javax.swing.JButton btnSubmit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -415,5 +444,25 @@ public class FrmListing extends javax.swing.JFrame {
         TableModelListing model = (TableModelListing) tblListing.getModel();
         model.fillTable();
     }
+
+   
+
+    void selectListing() {
+ 
+            btnDelete.setEnabled(false);
+            btnDetails.setEnabled(false);
+            btnDiscard.setEnabled(false);
+            btnSubmit.setEnabled(false);
+            btnLocation.setEnabled(false);
+            btnAddAppFeatures.setEnabled(false);
+            btnSelectListing.setVisible(true);
+        
+    }
+
+    public void setFrmRental(FrmRental frmRental) {
+        this.frmRental = frmRental;
+    }
+
+    
 
 }

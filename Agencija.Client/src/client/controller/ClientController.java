@@ -15,6 +15,7 @@ import domain.Employee;
 import domain.FeatureValue;
 import domain.Listing;
 import domain.Location;
+import domain.Rental;
 import java.util.ArrayList;
 
 /**
@@ -185,4 +186,29 @@ public class ClientController {
             throw response.getException();
         }
     }
+
+    public void addRental(Rental r) throws Exception {
+         Request request = new Request(Operations.ADD_RENTAL,r);
+        Response response = Communication.getInstance().sendRequest(request);
+        if (response.getResponseType().equals(ResponseType.SUCCESS)) {
+            System.out.println("Successfully created rental!");
+        } else {
+            throw response.getException();
+        }
+    }
+
+    public ArrayList<Rental> getAllRentals() throws Exception {
+         ArrayList<Rental> rentals = new ArrayList<>();
+        Request request = new Request(Operations.GET_ALL_RENTALS,null);
+        Response response = Communication.getInstance().sendRequest(request);
+        if (response.getResponseType().equals(ResponseType.SUCCESS)) {
+            rentals = (ArrayList<Rental>) response.getResult();
+            System.out.println("Rentals successfully retrieved");
+        } else {
+            throw response.getException();
+        }
+        return rentals;
+    }
+
+    
 }

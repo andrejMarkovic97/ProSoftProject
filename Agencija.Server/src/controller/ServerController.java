@@ -10,6 +10,7 @@ import domain.Employee;
 import domain.FeatureValue;
 import domain.Listing;
 import domain.Location;
+import domain.Rental;
 import java.util.ArrayList;
 import repository.db.DBRepository;
 import repository.db.impl.RepositoryEmployee;
@@ -25,6 +26,8 @@ import so.listing.SODeleteListing;
 import so.listing.SOGetAllListings;
 import so.location.SOGetAllLocations;
 import so.listing.SOUpdateListing;
+import so.rental.SOAddRental;
+import so.rental.SOGetAllRentals;
 
 /**
  *
@@ -116,6 +119,18 @@ public class ServerController {
     public void deleteListing(Listing l) throws Exception {
         SODeleteListing so = new SODeleteListing();
         so.execute(l);
+    }
+
+    public void addRental(Rental r) throws Exception {
+        SOAddRental so = new SOAddRental();
+        so.execute(r);
+    }
+
+    public ArrayList<Rental> getAllRentals() throws Exception {
+        SOGetAllRentals so = new SOGetAllRentals();
+        so.execute(null);
+        return so.getList();
+        
     }
 
     

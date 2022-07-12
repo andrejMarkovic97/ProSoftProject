@@ -90,5 +90,10 @@ public class Employee implements Serializable{
     public void setRentals(ArrayList<Rental> rentals) {
         this.rentals = rentals;
     }
+
+    @Override
+    public String toString() {
+        return firstName+" "+lastName;
+    }
    
 }

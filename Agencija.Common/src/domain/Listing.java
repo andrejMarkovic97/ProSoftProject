@@ -19,19 +19,23 @@ public class Listing implements Serializable{
     private int price;
     private String additionalDescription;
     private ArrayList<FeatureValue> featureValues;
+    private ArrayList<Rental> rentals;
     private Location location;
 
     public Listing() {
     }
 
-    public Listing(long listingID, Date publicationDate, int price, String additionalDescription, ArrayList<FeatureValue> featureValues,Location location) {
+    public Listing(long listingID, Date publicationDate, int price, String additionalDescription, ArrayList<FeatureValue> featureValues, ArrayList<Rental> rentals, Location location) {
         this.listingID = listingID;
         this.publicationDate = publicationDate;
         this.price = price;
         this.additionalDescription = additionalDescription;
         this.featureValues = featureValues;
-        this.location=location;
+        this.rentals = rentals;
+        this.location = location;
     }
+
+   
 
     
 
@@ -81,6 +85,14 @@ public class Listing implements Serializable{
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public ArrayList<Rental> getRentals() {
+        return rentals;
+    }
+
+    public void setRentals(ArrayList<Rental> rentals) {
+        this.rentals = rentals;
     }
     
 }

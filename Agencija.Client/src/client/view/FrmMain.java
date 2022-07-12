@@ -77,6 +77,11 @@ public class FrmMain extends javax.swing.JFrame {
         jmiOpenRentalFrm.setText("Rental");
 
         jMenuItem2.setText("Open Rental Form");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jmiOpenRentalFrm.add(jMenuItem2);
 
         jMenuMain.add(jmiOpenRentalFrm);
@@ -108,6 +113,11 @@ public class FrmMain extends javax.swing.JFrame {
         frm.setVisible(true);
         
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        FrmRental frm = new FrmRental();
+        frm.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments

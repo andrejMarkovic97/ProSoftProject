@@ -17,6 +17,7 @@ import domain.Employee;
 import domain.FeatureValue;
 import domain.Listing;
 import domain.Location;
+import domain.Rental;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -75,6 +76,10 @@ public class HandleClientThread extends Thread {
                 return updateListing(request);
             case Operations.DELETE_LISTING:
                 return deleteListing(request);
+            case Operations.ADD_RENTAL:
+                return addRental(request);
+            case Operations.GET_ALL_RENTALS:
+                return getAllRentals(request);
         }
         return null;
     }
@@ -279,6 +284,38 @@ public class HandleClientThread extends Thread {
             response.setException(ex);
         }
 
+        return response;
+    }
+
+    private Response addRental(Request request) {
+         Response response = new Response();
+        Rental r = (Rental) request.getArgument();
+        try {
+            ServerController.getInstance().addRental(r);
+            System.out.println("Rental successfully added!");
+            response.setResponseType(ResponseType.SUCCESS);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setResponseType(ResponseType.ERROR);
+            response.setException(ex);
+        }
+        return response;
+    }
+
+    private Response getAllRentals(Request request) {
+         Response response = new Response();
+        try {
+            ArrayList<Rental> list = ServerController.getInstance().getAllRentals();
+            System.out.println("Rentals successfully fetched!");
+            response.setResponseType(ResponseType.SUCCESS);
+            response.setResult(list);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setResponseType(ResponseType.ERROR);
+            response.setException(ex);
+            System.out.println("Error : "+ex.getMessage());
+
+        }
         return response;
     }
 

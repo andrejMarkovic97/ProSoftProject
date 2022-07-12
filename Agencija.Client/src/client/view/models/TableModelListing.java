@@ -17,7 +17,7 @@ import javax.swing.table.AbstractTableModel;
 public class TableModelListing extends AbstractTableModel {
 
     private ArrayList<Listing> list;
-    String[] columns = {"City", "Neighborhood", "Price", "Publication Date"};
+    String[] columns = {"ID","City", "Neighborhood", "Price", "Publication Date"};
 
     public TableModelListing() {
         list = new ArrayList<>();
@@ -44,14 +44,15 @@ public class TableModelListing extends AbstractTableModel {
 
         switch (columnIndex) {
             case 0:
-                return listing.getLocation().getCity();
+               return listing.getListingID();
             case 1:
-                return listing.getLocation().getNeighborhood();
+                 return listing.getLocation().getCity();
             case 2:
-                return listing.getPrice() + "€";
+               return listing.getLocation().getNeighborhood();
             case 3:
+                 return listing.getPrice() + "€";
+            case 4 :
                 return listing.getPublicationDate();
-
             default:
                 return "return!";
         }
@@ -101,7 +102,7 @@ public class TableModelListing extends AbstractTableModel {
         }
     }
 
-    public Listing getListingAtRow(int row) {
+    public Listing getListingAtRow(int row){
         Listing l = list.get(row);
         return l;
     }
