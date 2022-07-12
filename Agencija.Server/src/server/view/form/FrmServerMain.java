@@ -41,10 +41,8 @@ public class FrmServerMain extends javax.swing.JFrame {
         jMenuServer = new javax.swing.JMenu();
         miStartServer = new javax.swing.JMenuItem();
         miStopServer = new javax.swing.JMenuItem();
-        miClients = new javax.swing.JMenuItem();
         jMenuConfig = new javax.swing.JMenu();
         miDatabaseConfig = new javax.swing.JMenuItem();
-        miServerConfig = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -77,9 +75,6 @@ public class FrmServerMain extends javax.swing.JFrame {
         });
         jMenuServer.add(miStopServer);
 
-        miClients.setText("Clients");
-        jMenuServer.add(miClients);
-
         menuServer.add(jMenuServer);
 
         jMenuConfig.setText("Configuration");
@@ -91,9 +86,6 @@ public class FrmServerMain extends javax.swing.JFrame {
             }
         });
         jMenuConfig.add(miDatabaseConfig);
-
-        miServerConfig.setText("Server configuration");
-        jMenuConfig.add(miServerConfig);
 
         menuServer.add(jMenuConfig);
 
@@ -139,7 +131,8 @@ public class FrmServerMain extends javax.swing.JFrame {
     }//GEN-LAST:event_miStopServerActionPerformed
 
     private void miDatabaseConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDatabaseConfigActionPerformed
-        
+     FrmDatabaseConfiguration frm = new FrmDatabaseConfiguration(this, rootPaneCheckingEnabled);
+     frm.setVisible(true);
     }//GEN-LAST:event_miDatabaseConfigActionPerformed
 
     /**
@@ -183,9 +176,7 @@ public class FrmServerMain extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuServer;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JMenuBar menuServer;
-    private javax.swing.JMenuItem miClients;
     private javax.swing.JMenuItem miDatabaseConfig;
-    private javax.swing.JMenuItem miServerConfig;
     private javax.swing.JMenuItem miStartServer;
     private javax.swing.JMenuItem miStopServer;
     // End of variables declaration//GEN-END:variables

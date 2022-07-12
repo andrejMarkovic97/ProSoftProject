@@ -7,6 +7,7 @@ package repository.db.impl;
 
 import domain.Employee;
 import domain.Listing;
+import domain.Location;
 import domain.Rental;
 import java.io.IOException;
 import java.sql.Connection;
@@ -14,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,18 +28,22 @@ import repository.db.DBRepository;
  *
  * @author Andrej
  */
-public class RepositoryRental implements DBRepository<Rental, Long>{
-  private Connection connection;
+public class RepositoryRental implements DBRepository<Rental, Long> {
+
+    private Connection connection;
 
     public RepositoryRental() {
     }
-  
+
     @Override
     public List<Rental> getAll() throws Exception {
         try {
             List<Rental> rentals = new ArrayList<>();
-            String query = "SELECT * FROM rental r JOIN listing l ON (r.listingid=l.listingid)"
-                    + " JOIN employee e ON (r.employeeid = e.employeeid)";
+            String query = "SELECT * FROM rental r "
+                    + "JOIN listing l ON (r.listingid=l.listingid) "
+                    + "JOIN employee e "
+                    + "ON (r.employeeid = e.employeeid) "
+                    + "JOIN location loc ON (l.locationid=loc.locationid)";
             connection = DBConnectionFactory.getInstance().getConnection();
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
@@ -51,17 +57,23 @@ public class RepositoryRental implements DBRepository<Rental, Long>{
                 e.setRole(rs.getString("Role"));
                 e.setUsername(rs.getString("Username"));
                 e.setPassword(rs.getString("Password"));
-                
+
+                Location loc = new Location();
+                loc.setLocationID(rs.getLong("LocationID"));
+                loc.setCity(rs.getString("City"));
+                loc.setNeighborhood(rs.getString("Neighborhood"));
+
                 Listing l = new Listing();
                 l.setListingID(rs.getLong("ListingID"));
                 l.setPublicationDate(new Date(rs.getDate("PublicationDate").getTime()));
                 l.setPrice(rs.getInt("Price"));
                 l.setAdditionalDescription(rs.getString("AdditionalDescription"));
-                
+                l.setLocation(loc);
+
                 r.setEmployee(e);
                 r.setListing(l);
                 r.setRentingDate((new Date(rs.getDate("RentingDate").getTime())));
-                
+
                 rentals.add(r);
             }
             rs.close();
@@ -86,7 +98,7 @@ public class RepositoryRental implements DBRepository<Rental, Long>{
             statement.setLong(2, t.getEmployee().getEmployeeID());
             statement.setDate(3, new java.sql.Date(t.getRentingDate().getTime()));
             statement.executeUpdate();
-            
+
             System.out.println("Rental added");
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -110,17 +122,30 @@ public class RepositoryRental implements DBRepository<Rental, Long>{
     }
 
     void deleteEmployeesRentalsByID(long employeeID) throws Exception {
-         String sql = "DELETE FROM rental WHERE EmployeeID="+employeeID+"";
+        String sql = "DELETE FROM rental WHERE EmployeeID=" + employeeID + "";
         try {
-           connection = DBConnectionFactory.getInstance().getConnection();
-           Statement  statement = connection.createStatement();
-            
+            connection = DBConnectionFactory.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+
             statement.executeUpdate(sql);
             System.out.println("Successfully deleted employee rentals");
         } catch (SQLException ex) {
-           ex.printStackTrace();
-           throw new Exception("Can't delete rentals from employee");
+            ex.printStackTrace();
+            throw new Exception("Can't delete rentals from employee");
         }
     }
-    
+
+    public void deleteByListingID(long listingID) throws IOException, Exception {
+        String sql = "DELETE FROM rental WHERE ListingID=" + listingID;
+        try {
+            connection = DBConnectionFactory.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+
+            statement.executeUpdate(sql);
+            System.out.println("Successfully deleted listing rentals");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new Exception("Can't delete rentals from listings");
+        }
+    }
 }

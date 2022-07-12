@@ -9,6 +9,7 @@ import domain.FeatureValue;
 import domain.Listing;
 import repository.db.impl.RepositoryFeatureValue;
 import repository.db.impl.RepositoryListing;
+import repository.db.impl.RepositoryRental;
 import so.AbstractSO;
 
 /**
@@ -19,10 +20,12 @@ public class SODeleteListing extends AbstractSO {
 
     private final RepositoryListing storageListing;
     private final RepositoryFeatureValue storageFeatureValue;
+    private final RepositoryRental storageRental;
 
     public SODeleteListing() {
         storageFeatureValue = new RepositoryFeatureValue();
         storageListing = new RepositoryListing();
+        storageRental = new RepositoryRental();
     }
 
     @Override
@@ -35,12 +38,12 @@ public class SODeleteListing extends AbstractSO {
     @Override
     protected void executeOperation(Object param) throws Exception {
         Listing l = (Listing) param;
-        if (l.getFeatureValues() != null) {
-            for (FeatureValue featureValue : l.getFeatureValues()) {
-                storageFeatureValue.connect();
-                storageFeatureValue.delete(featureValue);
-            }
-        }
+        storageFeatureValue.connect();
+        storageFeatureValue.deleteByID(l.getListingID());
+        
+        storageRental.connect();
+        storageRental.deleteByListingID(l.getListingID());
+        
         storageListing.connect();
         storageListing.delete(l);
 

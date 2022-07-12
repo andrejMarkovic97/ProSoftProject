@@ -25,11 +25,6 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miStopServerActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="miClients">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Clients"/>
-              </Properties>
-            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenuConfig">
@@ -44,11 +39,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miDatabaseConfigActionPerformed"/>
               </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="miServerConfig">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Server configuration"/>
-              </Properties>
             </MenuItem>
           </SubComponents>
         </Menu>

@@ -148,4 +148,16 @@ public class RepositoryFeatureValue implements DBRepository<FeatureValue, Long> 
 
         }
     }
+
+    public void deleteByID(long listingID) throws IOException {
+        String sql = "DELETE FROM FEATUREVALUE WHERE ListingID="+listingID;
+        System.out.println(sql);
+        try {
+            connection = DBConnectionFactory.getInstance().getConnection();
+            Statement statement = connection.prepareStatement(sql);
+            statement.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(RepositoryFeatureValue.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
