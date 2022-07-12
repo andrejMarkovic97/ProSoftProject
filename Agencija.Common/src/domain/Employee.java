@@ -6,13 +6,15 @@
 package domain;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
  *
  * @author Andrej
  */
-public class Employee implements Serializable{
+public class Employee extends AbstractDomainObject implements Serializable{
    private long employeeID;
    private String firstName;
    private String lastName;
@@ -94,6 +96,63 @@ public class Employee implements Serializable{
     @Override
     public String toString() {
         return firstName+" "+lastName;
+    }
+
+    @Override
+    public String tableName() {
+        return" employee ";
+    }
+
+    @Override
+    public String alias() {
+        return " e ";
+    }
+
+    @Override
+    public String join() {
+        return "";
+    }
+
+    @Override
+    public ArrayList<AbstractDomainObject> getList(ResultSet rs) throws SQLException {
+        ArrayList<AbstractDomainObject> list = new ArrayList<>();
+
+        while (rs.next()) {
+            Employee e = new Employee(rs.getLong("EmployeeID"), rs.getString("FirstName"),
+                    rs.getString("LastName"), rs.getString("Role"),
+                    rs.getString("Username"), rs.getString("Password"), null);
+
+            list.add(e);
+        }
+
+        rs.close();
+        return list;
+    }
+
+    @Override
+    public String insertColumns() {
+        return " (FirstName,LastName,Role,Username,Password) ";
+    }
+
+    @Override
+    public String primaryKeyValue() {
+        return " EmployeeID= "+employeeID;
+    }
+
+    @Override
+    public String insertValue() {
+        return " '"+firstName+", '"+lastName+"', '"+role+"', '"+username+"', '"+password+"' ";
+    }
+
+    @Override
+    public String updateValue() {
+        return " FirstName='"+firstName+"', LastName='"+lastName+"', Role='"+role+"',"
+                + " Username='"+username+"', Password='"+password+"' ";
+    }
+
+    @Override
+    public String condition() {
+        return " WHERE e.employeeid= "+employeeID;
     }
    
 }

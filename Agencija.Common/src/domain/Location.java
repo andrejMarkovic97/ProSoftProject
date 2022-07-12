@@ -6,12 +6,15 @@
 package domain;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
  * @author Andrej
  */
-public class Location implements Serializable{
+public class Location extends AbstractDomainObject implements Serializable{
   private long locationID;
   private String city;
   private String neighborhood;
@@ -47,6 +50,59 @@ public class Location implements Serializable{
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    @Override
+    public String tableName() {
+        return " location ";
+    }
+
+    @Override
+    public String alias() {
+        return " loc ";
+    }
+
+    @Override
+    public String join() {
+        return "";
+    }
+
+    @Override
+    public ArrayList<AbstractDomainObject> getList(ResultSet rs) throws SQLException {
+        ArrayList<AbstractDomainObject> lista = new ArrayList<>();
+
+        while (rs.next()) {
+            Location loc = new Location(rs.getLong("LocationID"), rs.getString("City"),rs.getString("Neighborhood"));
+            lista.add(loc);
+        }
+
+        rs.close();
+        return lista;
+    }
+
+    @Override
+    public String insertColumns() {
+        return "";
+    }
+
+    @Override
+    public String primaryKeyValue() {
+        return "LocationID = "+locationID;
+    }
+
+    @Override
+    public String insertValue() {
+        return "";
+    }
+
+    @Override
+    public String updateValue() {
+        return "";
+    }
+
+    @Override
+    public String condition() {
+        return "";
     }
   
 }

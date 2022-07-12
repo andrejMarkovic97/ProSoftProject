@@ -6,6 +6,8 @@
 package domain;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -13,7 +15,7 @@ import java.util.Date;
  *
  * @author Andrej
  */
-public class Listing implements Serializable{
+public class Listing extends AbstractDomainObject implements Serializable{
    private long listingID;
     private Date publicationDate;
     private int price;
@@ -93,6 +95,65 @@ public class Listing implements Serializable{
 
     public void setRentals(ArrayList<Rental> rentals) {
         this.rentals = rentals;
+    }
+
+    @Override
+    public String tableName() {
+        return " listing ";
+    }
+
+    @Override
+    public String alias() {
+        return " l ";
+    }
+
+    @Override
+    public String join() {
+        return " join location loc on (l.locationid=loc.locationid) ";
+    }
+
+    @Override
+    public ArrayList<AbstractDomainObject> getList(ResultSet rs) throws SQLException {
+        ArrayList<AbstractDomainObject> lista = new ArrayList<>();
+
+        while (rs.next()) {
+            Location loc = new Location(rs.getLong("LocationID"), rs.getString("City"),rs.getString("Neighborhood"));
+            
+            Listing listing = new Listing(rs.getLong("ListingID"), new Date(rs.getDate("PublicationDate").getTime()),
+                    rs.getInt("Price"), rs.getString("AdditionalDescription"), null, null, loc);
+
+            lista.add(listing);
+        }
+
+        rs.close();
+        return lista;
+    }
+
+    @Override
+    public String insertColumns() {
+        return " (PublicationDate, Price, AdditionalDescription, LocationID) ";
+    }
+
+    @Override
+    public String primaryKeyValue() {
+        return " ListingID = "+listingID;
+    }
+
+    @Override
+    public String insertValue() {
+        return " '"+new java.sql.Date(publicationDate.getTime())+"', "+price+"',"
+                + " '"+additionalDescription+"', "+location.getLocationID(); 
+    }
+
+    @Override
+    public String updateValue() {
+        return " price="+price+", AdditionalDescription='"+additionalDescription+"',"
+                + " LocationID="+location.getLocationID()+" ";
+    }
+
+    @Override
+    public String condition() {
+        return "WHERE listingID= "+listingID;
     }
     
 }
