@@ -98,31 +98,6 @@ public class TableModelApartmentFeatures extends AbstractTableModel {
         this.listing = listing;
     }
 
-//    public void fillTableWithListingID(long listingID) throws Exception {
-//        list = ClientController.getInstance().getAllApartmentFeatures();
-//        ArrayList<FeatureValue> featureValues = ClientController.getInstance().getAllFeatureValues(listing.getListingID());
-//        for (FeatureValue fv : featureValues) {
-//            fv.setListing(listing);
-//        }
-//        listing.setFeatureValues(featureValues);
-//        
-//    }
-
-    public void fillTableWithListingFeatureValueDetails() throws Exception {
-        list = ClientController.getInstance().getAllApartmentFeatures();
-        for (ApartmentFeatures af : list) {
-            for (FeatureValue featureValue : listing.getFeatureValues()) {
-                if(featureValue.getAppFeatures().getFeatureID()==af.getFeatureID()){
-                    if(af.getFeatureValues()==null){
-                        af.setFeatureValues(new ArrayList<>());
-                    }
-                    af.getFeatureValues().add(featureValue);
-                }
-            }
-        }
-        fireTableDataChanged();
-    }
-
     public void setList(ArrayList<ApartmentFeatures> list) {
         this.list = list;
     }
@@ -134,6 +109,10 @@ public class TableModelApartmentFeatures extends AbstractTableModel {
             }
         }
         fireTableDataChanged();
+    }
+
+    public ArrayList<ApartmentFeatures> getList() {
+        return list;
     }
 
 }

@@ -5,9 +5,10 @@
  */
 package so.listing;
 
+import db.DBBroker;
+import domain.AbstractDomainObject;
 import domain.Listing;
 import java.util.ArrayList;
-import repository.db.impl.RepositoryListing;
 import so.AbstractSO;
 
 /**
@@ -15,26 +16,25 @@ import so.AbstractSO;
  * @author Andrej
  */
 public class SOGetAllListings extends AbstractSO{
-    private final RepositoryListing storageListing;
     private ArrayList<Listing> list;
-    public SOGetAllListings() {
-    storageListing = new RepositoryListing();
-    }
     
     
-    @Override
-    protected void precondition(Object param) throws Exception {
-
-    }
-
-    @Override
-    protected void executeOperation(Object param) throws Exception {
-     storageListing.connect();
-     list = (ArrayList<Listing>) storageListing.getAll();
-    }
 
     public ArrayList<Listing> getList() {
         return list;
+    }
+
+    @Override
+    protected void precondition(AbstractDomainObject ado) throws Exception {
+        if (!(ado instanceof Listing)) {
+            throw new Exception("The object that has been sent is not a instance of class Listing!");
+        }
+    }
+
+    @Override
+    protected void executeOperation(AbstractDomainObject ado) throws Exception {
+      ArrayList<AbstractDomainObject> listings = DBBroker.getInstance().select(ado);
+        list = (ArrayList<Listing>) (ArrayList<?>) listings;  
     }
     
 }

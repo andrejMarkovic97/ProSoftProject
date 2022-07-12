@@ -5,9 +5,10 @@
  */
 package so.apartmentfeatures;
 
+import db.DBBroker;
+import domain.AbstractDomainObject;
 import domain.ApartmentFeatures;
 import java.util.ArrayList;
-import repository.db.impl.RepositoryApartmentFeatures;
 import so.AbstractSO;
 
 /**
@@ -15,26 +16,24 @@ import so.AbstractSO;
  * @author Andrej
  */
 public class SOGetAllApartmentFeatures extends AbstractSO{
-    private final RepositoryApartmentFeatures storageFeatures;
     private ArrayList<ApartmentFeatures> list;
-    public SOGetAllApartmentFeatures() {
-        storageFeatures = new RepositoryApartmentFeatures();
-    }
-    
-    
     @Override
-    protected void precondition(Object param) throws Exception {
-
+    protected void precondition(AbstractDomainObject ado) throws Exception {
+        if (!(ado instanceof ApartmentFeatures)) {
+            throw new Exception("The object that has been sent is not a instance of class ApartmentFeatures!");
+        }
     }
 
     @Override
-    protected void executeOperation(Object param) throws Exception {
-        storageFeatures.connect();
-        list = (ArrayList<ApartmentFeatures>) storageFeatures.getAll();
+    protected void executeOperation(AbstractDomainObject ado) throws Exception {
+        ArrayList<AbstractDomainObject> features = DBBroker.getInstance().select(ado);
+        list =  (ArrayList<ApartmentFeatures>)(ArrayList<?>)features;
     }
 
     public ArrayList<ApartmentFeatures> getList() {
         return list;
     }
+
+
     
 }

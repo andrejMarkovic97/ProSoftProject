@@ -12,8 +12,6 @@ import domain.Listing;
 import domain.Location;
 import domain.Rental;
 import java.util.ArrayList;
-import repository.db.DBRepository;
-import repository.db.impl.RepositoryEmployee;
 import so.apartmentfeatures.SOGetAllApartmentFeatures;
 import so.employee.SOAddEmployee;
 import so.employee.SODeleteEmployee;
@@ -36,10 +34,8 @@ import so.rental.SOGetAllRentals;
 public class ServerController {
 
     private static ServerController instance;
-    private final DBRepository storageEmployee;
 
     public ServerController() {
-        storageEmployee = new RepositoryEmployee();
     }
 
     public static ServerController getInstance() {
@@ -52,8 +48,6 @@ public class ServerController {
     public Employee login(Employee employee) throws Exception {
         SOLoginEmployee loginEmployeeSo = new SOLoginEmployee();
         loginEmployeeSo.execute(employee);
-        Employee e = loginEmployeeSo.getEmployee();
-        System.out.println(e);
 
         return loginEmployeeSo.getEmployee();
     }
@@ -66,7 +60,7 @@ public class ServerController {
 
     public ArrayList<Employee> getAllEmployees() throws Exception {
         SOGetAllEmployees so = new SOGetAllEmployees();
-        so.execute(null);
+        so.execute(new Employee());
         ArrayList<Employee> list = so.getList();
         return list;
     }
@@ -83,13 +77,13 @@ public class ServerController {
 
     public ArrayList<Location> getAllLocations() throws Exception {
         SOGetAllLocations so = new SOGetAllLocations();
-        so.execute(null);
+        so.execute(new Location());
         return so.getList();
     }
 
     public ArrayList<ApartmentFeatures> getAllApartmentFeatures() throws Exception {
         SOGetAllApartmentFeatures so = new SOGetAllApartmentFeatures();
-        so.execute(null);
+        so.execute(new ApartmentFeatures());
         return so.getList();
     }
 
@@ -101,15 +95,11 @@ public class ServerController {
 
     public ArrayList<Listing> getAllListings() throws Exception {
         SOGetAllListings so = new SOGetAllListings();
-        so.execute(null);
+        so.execute(new Listing());
         return so.getList();
     }
 
-    public ArrayList<FeatureValue> getAllFeatureValues(long id) throws Exception {
-        SOGetAllFeatureValues so = new SOGetAllFeatureValues();
-        so.execute(id);
-        return so.getList();
-    }
+   
 
     public void updateListing(Listing l) throws Exception {
         SOUpdateListing so = new SOUpdateListing();
@@ -128,9 +118,15 @@ public class ServerController {
 
     public ArrayList<Rental> getAllRentals() throws Exception {
         SOGetAllRentals so = new SOGetAllRentals();
-        so.execute(null);
+        so.execute(new Rental());
         return so.getList();
         
+    }
+
+    public ArrayList<FeatureValue> getAllFeatureValues() throws Exception {
+        SOGetAllFeatureValues so = new SOGetAllFeatureValues();
+        so.execute(new FeatureValue());
+        return so.getList();
     }
 
     

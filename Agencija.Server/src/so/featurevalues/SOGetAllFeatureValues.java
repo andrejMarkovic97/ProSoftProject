@@ -5,9 +5,10 @@
  */
 package so.featurevalues;
 
+import db.DBBroker;
+import domain.AbstractDomainObject;
 import domain.FeatureValue;
 import java.util.ArrayList;
-import repository.db.impl.RepositoryFeatureValue;
 import so.AbstractSO;
 
 /**
@@ -17,29 +18,22 @@ import so.AbstractSO;
 public class SOGetAllFeatureValues extends AbstractSO {
 
     private ArrayList<FeatureValue> list;
-    private final RepositoryFeatureValue storageFeatureValue;
 
-    public SOGetAllFeatureValues() {
-        storageFeatureValue = new RepositoryFeatureValue();
-    }
-    
     @Override
-    protected void precondition(Object param) throws Exception {
-        long id = (long) param;
-        if (id < 0) {
-            throw new Exception("Invalid parametar");
+    protected void precondition(AbstractDomainObject ado) throws Exception {
+       if (!(ado instanceof FeatureValue)) {
+            throw new Exception("The object that has been sent is not a instance of class FeatureValue!");
         }
-    }
-
-    @Override
-    protected void executeOperation(Object param) throws Exception {
-        long id = (long) param;
-        storageFeatureValue.connect();
-        list = storageFeatureValue.getAllByID(id);
     }
 
     public ArrayList<FeatureValue> getList() {
         return list;
+    }
+
+    @Override
+    protected void executeOperation(AbstractDomainObject ado) throws Exception {
+        ArrayList<AbstractDomainObject> narudzbine = DBBroker.getInstance().select(ado);
+        list = (ArrayList<FeatureValue>) (ArrayList<?>) narudzbine;
     }
 
 }

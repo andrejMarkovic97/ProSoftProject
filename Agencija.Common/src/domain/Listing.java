@@ -15,8 +15,9 @@ import java.util.Date;
  *
  * @author Andrej
  */
-public class Listing extends AbstractDomainObject implements Serializable{
-   private long listingID;
+public class Listing extends AbstractDomainObject implements Serializable {
+
+    private long listingID;
     private Date publicationDate;
     private int price;
     private String additionalDescription;
@@ -36,10 +37,6 @@ public class Listing extends AbstractDomainObject implements Serializable{
         this.rentals = rentals;
         this.location = location;
     }
-
-   
-
-    
 
     public ArrayList<FeatureValue> getFeatureValues() {
         return featureValues;
@@ -117,8 +114,8 @@ public class Listing extends AbstractDomainObject implements Serializable{
         ArrayList<AbstractDomainObject> lista = new ArrayList<>();
 
         while (rs.next()) {
-            Location loc = new Location(rs.getLong("LocationID"), rs.getString("City"),rs.getString("Neighborhood"));
-            
+            Location loc = new Location(rs.getLong("LocationID"), rs.getString("City"), rs.getString("Neighborhood"));
+
             Listing listing = new Listing(rs.getLong("ListingID"), new Date(rs.getDate("PublicationDate").getTime()),
                     rs.getInt("Price"), rs.getString("AdditionalDescription"), null, null, loc);
 
@@ -136,24 +133,24 @@ public class Listing extends AbstractDomainObject implements Serializable{
 
     @Override
     public String primaryKeyValue() {
-        return " ListingID = "+listingID;
+        return " ListingID = " + listingID;
     }
 
     @Override
     public String insertValue() {
-        return " '"+new java.sql.Date(publicationDate.getTime())+"', "+price+"',"
-                + " '"+additionalDescription+"', "+location.getLocationID(); 
+        return " '" + new java.sql.Date(publicationDate.getTime()) + "', " + price + ","
+                + " '" + additionalDescription + "', " + location.getLocationID();
     }
 
     @Override
     public String updateValue() {
-        return " price="+price+", AdditionalDescription='"+additionalDescription+"',"
-                + " LocationID="+location.getLocationID()+" ";
+        return " price=" + price + ", AdditionalDescription='" + additionalDescription + "',"
+                + " LocationID=" + location.getLocationID() + " ";
     }
 
     @Override
     public String condition() {
-        return "WHERE listingID= "+listingID;
+        return "";
     }
-    
+
 }

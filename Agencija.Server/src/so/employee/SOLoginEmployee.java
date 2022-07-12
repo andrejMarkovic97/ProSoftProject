@@ -5,9 +5,11 @@
  */
 package so.employee;
 
+import db.DBBroker;
+import domain.AbstractDomainObject;
 import domain.Employee;
+import java.util.ArrayList;
 import java.util.List;
-import repository.db.impl.RepositoryEmployee;
 import so.AbstractSO;
 
 /**
@@ -17,36 +19,30 @@ import so.AbstractSO;
 public class SOLoginEmployee extends AbstractSO {
 
     private Employee employee;
-    private final RepositoryEmployee storageEmployee;
 
-    public SOLoginEmployee() {
-        employee = null;
-        storageEmployee = new RepositoryEmployee();
-    }
 
     @Override
-    protected void precondition(Object param) throws Exception {
-        if (!(param instanceof Employee)) {
+    protected void precondition(AbstractDomainObject ado) throws Exception {
+        if (!(ado instanceof Employee)) {
             throw new Exception("Param is not a instance of employee");
         }
-        if (param == null) {
+        if (ado == null) {
             throw new Exception("Param is null");
         }
     }
 
     @Override
-    protected void executeOperation(Object param) throws Exception {
-        Employee e = (Employee) param;
-        storageEmployee.connect();
-        List<Employee> employees = storageEmployee.getAll();
-        storageEmployee.commit();
+    protected void executeOperation(AbstractDomainObject ado) throws Exception {
+        Employee e = (Employee) ado;
+        ArrayList<Employee> employees = (ArrayList<Employee>)(ArrayList<?>)DBBroker.getInstance().select(ado);
         for (Employee empl : employees) {
-            if (empl.getUsername().equals(e.getUsername()) && empl.getPassword().equals(e.getPassword())) {
+            if(empl.getUsername().equals(e.getUsername()) &&
+                    empl.getPassword().equals(e.getPassword())){
                 employee = empl;
                 return;
             }
         }
-        throw new Exception("An employee dosen't exist with those credentials");
+        throw new Exception("No employee with these credentials!");
     }
 
     public Employee getEmployee() {

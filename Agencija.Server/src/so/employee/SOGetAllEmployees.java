@@ -5,9 +5,10 @@
  */
 package so.employee;
 
+import db.DBBroker;
+import domain.AbstractDomainObject;
 import domain.Employee;
 import java.util.ArrayList;
-import repository.db.impl.RepositoryEmployee;
 import so.AbstractSO;
 
 /**
@@ -16,22 +17,20 @@ import so.AbstractSO;
  */
 public class SOGetAllEmployees extends AbstractSO{
     private ArrayList<Employee> list;
-    private final RepositoryEmployee storageEmployee;
-
-    public SOGetAllEmployees() {
-        storageEmployee = new RepositoryEmployee();
-    }
 
    
     
     @Override
-    protected void precondition(Object param) throws Exception {
+    protected void precondition(AbstractDomainObject ado) throws Exception {
+       if (!(ado instanceof Employee)) {
+            throw new Exception("The object that has been sent is not a instance of class Employee!");
+        }
     }
 
     @Override
-    protected void executeOperation(Object param) throws Exception {
-        storageEmployee.connect();
-        list = (ArrayList<Employee>) storageEmployee.getAll();
+    protected void executeOperation(AbstractDomainObject ado) throws Exception {
+        ArrayList<AbstractDomainObject> employees = DBBroker.getInstance().select(ado);
+        list = (ArrayList<Employee>) (ArrayList<?>) employees;
     }
 
     public ArrayList<Employee> getList() {

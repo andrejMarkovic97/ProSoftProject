@@ -141,7 +141,7 @@ public class Employee extends AbstractDomainObject implements Serializable{
 
     @Override
     public String insertValue() {
-        return " '"+firstName+", '"+lastName+"', '"+role+"', '"+username+"', '"+password+"' ";
+        return " '"+firstName+"', '"+lastName+"', '"+role+"', '"+username+"', '"+password+"' ";
     }
 
     @Override
@@ -152,7 +152,7 @@ public class Employee extends AbstractDomainObject implements Serializable{
 
     @Override
     public String condition() {
-        return " WHERE e.employeeid= "+employeeID;
+        return "";
     }
    
 }

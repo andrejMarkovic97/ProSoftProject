@@ -96,7 +96,7 @@ public class Rental extends AbstractDomainObject implements Serializable{
 
     @Override
     public String insertColumns() {
-        return " (ListingID,EmployeeID,RentingDate)";
+        return " (ListingID,EmployeeID,RentingDate) ";
     }
 
     @Override

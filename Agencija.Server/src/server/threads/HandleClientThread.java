@@ -70,8 +70,6 @@ public class HandleClientThread extends Thread {
                 return addListing(request);
             case Operations.GET_ALL_LISTINGS:
                 return getAllListings(request);
-            case Operations.GET_ALL_FEATURE_VALUES:
-                return getAllFeatureValues(request);
             case Operations.UPDATE_LISTING:
                 return updateListing(request);
             case Operations.DELETE_LISTING:
@@ -80,6 +78,8 @@ public class HandleClientThread extends Thread {
                 return addRental(request);
             case Operations.GET_ALL_RENTALS:
                 return getAllRentals(request);
+            case Operations.GET_ALL_FEATURE_VALUES:
+                return getAllFeatureValues(request);
         }
         return null;
     }
@@ -126,6 +126,7 @@ public class HandleClientThread extends Thread {
 
     private Response getAllEmployees(Request request) {
         Response response = new Response();
+        
         try {
 
             ArrayList<Employee> list = ServerController.getInstance().getAllEmployees();
@@ -238,24 +239,6 @@ public class HandleClientThread extends Thread {
         return response;
     }
 
-    private Response getAllFeatureValues(Request request) {
-        Response response = new Response();
-        long id = (long) request.getArgument();
-        try {
-
-            ArrayList<FeatureValue> list = ServerController.getInstance().getAllFeatureValues(id);
-            System.out.println("Feature values successfully fetched!");
-            response.setResponseType(ResponseType.SUCCESS);
-            response.setResult(list);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            response.setResponseType(ResponseType.ERROR);
-            response.setException(ex);
-
-        }
-        return response;
-    }
-
     private Response updateListing(Request request) {
         Response response = new Response();
         Listing l = (Listing) request.getArgument();
@@ -307,6 +290,23 @@ public class HandleClientThread extends Thread {
         try {
             ArrayList<Rental> list = ServerController.getInstance().getAllRentals();
             System.out.println("Rentals successfully fetched!");
+            response.setResponseType(ResponseType.SUCCESS);
+            response.setResult(list);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setResponseType(ResponseType.ERROR);
+            response.setException(ex);
+            System.out.println("Error : "+ex.getMessage());
+
+        }
+        return response;
+    }
+
+    private Response getAllFeatureValues(Request request) {
+        Response response = new Response();
+        try {
+            ArrayList<FeatureValue> list = ServerController.getInstance().getAllFeatureValues();
+            System.out.println("Feature values successfully fetched!");
             response.setResponseType(ResponseType.SUCCESS);
             response.setResult(list);
         } catch (Exception ex) {

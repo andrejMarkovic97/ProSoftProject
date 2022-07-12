@@ -143,9 +143,17 @@ public class FrmApartmentFeatures extends javax.swing.JDialog {
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
         if(flag==false){
-            JOptionPane.showMessageDialog(this, "You must insert atleast one apartment feature value!");
+            JOptionPane.showMessageDialog(this, "Svaka vrijednost se mora unijeti!");
             return;
         }
+        TableModelApartmentFeatures model = (TableModelApartmentFeatures) tblApartmentFeatures.getModel();
+        for (ApartmentFeatures apartmentFeatures : model.getList()) {
+            if(apartmentFeatures.getFeatureValues()==null || apartmentFeatures.getFeatureValues().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Svaka vrijednost se mora unijeti!");
+                return;
+            }
+        }
+        
         frm.setListing(listing);
         this.dispose();
     }//GEN-LAST:event_btnSubmitActionPerformed

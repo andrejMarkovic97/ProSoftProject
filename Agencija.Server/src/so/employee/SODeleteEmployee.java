@@ -5,8 +5,9 @@
  */
 package so.employee;
 
+import db.DBBroker;
+import domain.AbstractDomainObject;
 import domain.Employee;
-import repository.db.impl.RepositoryEmployee;
 import so.AbstractSO;
 
 /**
@@ -15,18 +16,14 @@ import so.AbstractSO;
  */
 public class SODeleteEmployee extends AbstractSO {
 
-    private final RepositoryEmployee storageEmployee;
 
-    public SODeleteEmployee() {
-        storageEmployee = new RepositoryEmployee();
-    }
 
     @Override
-    protected void precondition(Object param) throws Exception {
-        if (param == null || !(param instanceof Employee)) {
+    protected void precondition(AbstractDomainObject ado) throws Exception {
+        if (ado == null || !(ado instanceof Employee)) {
             throw new Exception("Invalid parametar");
         }
-        Employee employee = (Employee) param;
+        Employee employee = (Employee) ado;
         if (employee.getUsername() == null || employee.getPassword() == null || employee.getUsername().isEmpty()
                 || employee.getPassword().isEmpty()) {
             throw new Exception("Empty parameters");
@@ -34,20 +31,8 @@ public class SODeleteEmployee extends AbstractSO {
     }
 
     @Override
-    protected void executeOperation(Object param) throws Exception {
-        Employee e = (Employee) param;
-        storageEmployee.connect();
-        storageEmployee.delete(e);
-        
-    }
-    @Override
-    protected void commitTransaction() throws Exception {
-        storageEmployee.commit();
-    }
-
-    @Override
-    protected void rollbackTransaction() throws Exception {
-        storageEmployee.rollback();
-
+    protected void executeOperation(AbstractDomainObject ado) throws Exception {
+        Employee e = (Employee) ado;
+        DBBroker.getInstance().delete(ado);
     }
 }

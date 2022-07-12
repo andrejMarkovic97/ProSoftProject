@@ -5,9 +5,10 @@
  */
 package so.rental;
 
+import db.DBBroker;
+import domain.AbstractDomainObject;
 import domain.Rental;
 import java.util.ArrayList;
-import repository.db.impl.RepositoryRental;
 import so.AbstractSO;
 
 /**
@@ -15,36 +16,23 @@ import so.AbstractSO;
  * @author Andrej
  */
 public class SOGetAllRentals extends AbstractSO{
-    private final RepositoryRental storageRental;
     private ArrayList<Rental> list;
 
-    public SOGetAllRentals() {
-        storageRental=new RepositoryRental();
-    }
-    
-     protected void precondition(Object param) throws Exception {
-   
+    @Override
+    protected void precondition(AbstractDomainObject ado) throws Exception {
+         if (!(ado instanceof Rental)) {
+            throw new Exception("Invalid parametar");
+        }
     }
 
     @Override
-    protected void executeOperation(Object param) throws Exception {
-        storageRental.connect();
-        list = (ArrayList<Rental>) storageRental.getAll();
-
-    }
-
-    @Override
-    protected void commitTransaction() throws Exception {
-        storageRental.commit();
-    }
-
-    @Override
-    protected void rollbackTransaction() throws Exception {
-        storageRental.rollback();
-
+    protected void executeOperation(AbstractDomainObject ado) throws Exception {
+         ArrayList<AbstractDomainObject> rentals = DBBroker.getInstance().select(ado);
+        list = (ArrayList<Rental>) (ArrayList<?>) rentals ;  
     }
 
     public ArrayList<Rental> getList() {
         return list;
     }
+    
 }

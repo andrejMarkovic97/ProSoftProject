@@ -6,6 +6,7 @@
 package client.view.models;
 
 import client.controller.ClientController;
+import domain.FeatureValue;
 import domain.Listing;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
@@ -62,7 +63,13 @@ public class TableModelListing extends AbstractTableModel {
         try {
             list = ClientController.getInstance().getAllListings();
             for (Listing listing : list) {
-                listing.setFeatureValues(ClientController.getInstance().getAllFeatureValues(listing.getListingID()));
+               ArrayList<FeatureValue> featureValues = ClientController.getInstance().getAllFeatureValues();
+                for (FeatureValue featureValue : featureValues) {
+                    if(listing.getListingID()==featureValue.getListing().getListingID()){
+                        listing.setFeatureValues(new ArrayList<>());
+                        listing.getFeatureValues().add(featureValue);
+                    }
+                }
             }
             fireTableDataChanged();
         } catch (Exception ex) {

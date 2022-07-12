@@ -54,36 +54,36 @@ public class DBBroker {
         return instance;
     }
 
-    public ArrayList<AbstractDomainObject> select(AbstractDomainObject ado) throws SQLException {
+    public ArrayList<AbstractDomainObject> select(AbstractDomainObject ado) throws SQLException, IOException {
         String sql = "SELECT * FROM " + ado.tableName() + " " + ado.alias()
                 + " " + ado.join() + " " + ado.condition();
         System.out.println(sql);
-        Statement s = connection.createStatement();
+        Statement s = getConnection().createStatement();
         ResultSet rs = s.executeQuery(sql);
         return ado.getList(rs);
     }
 
-    public PreparedStatement insert(AbstractDomainObject ado) throws SQLException {
+    public PreparedStatement insert(AbstractDomainObject ado) throws SQLException, IOException {
         String sql = "INSERT INTO " + ado.tableName() + " "
                 + ado.insertColumns() + " VALUES(" + ado.insertValue() + ")";
         System.out.println(sql);
-        PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement ps = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ps.executeUpdate();
         return ps;
     }
 
-    public void update(AbstractDomainObject ado) throws SQLException {
+    public void update(AbstractDomainObject ado) throws SQLException, IOException {
         String sql = "UPDATE " + ado.tableName() + " SET "
                 + ado.updateValue() + " WHERE " + ado.primaryKeyValue();
         System.out.println(sql);
-        Statement s = connection.createStatement();
+        Statement s = getConnection().createStatement();
         s.executeUpdate(sql);
     }
 
-    public void delete(AbstractDomainObject ado) throws SQLException {
+    public void delete(AbstractDomainObject ado) throws SQLException, IOException {
         String sql = "DELETE FROM " + ado.tableName() + " WHERE " + ado.primaryKeyValue();
         System.out.println(sql);
-        Statement s = connection.createStatement();
+        Statement s = getConnection().createStatement();
         s.executeUpdate(sql);
     }
 }

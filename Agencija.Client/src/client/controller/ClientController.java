@@ -154,9 +154,9 @@ public class ClientController {
         return listings;
     }
 
-    public ArrayList<FeatureValue> getAllFeatureValues(long listingID) throws Exception {
+    public ArrayList<FeatureValue> getAllFeatureValues() throws Exception {
         ArrayList<FeatureValue> featureValues = new ArrayList<>();
-        Request request = new Request(Operations.GET_ALL_FEATURE_VALUES, listingID);
+        Request request = new Request(Operations.GET_ALL_FEATURE_VALUES,null);
         Response response = Communication.getInstance().sendRequest(request);
         if (response.getResponseType().equals(ResponseType.SUCCESS)) {
             featureValues = (ArrayList<FeatureValue>) response.getResult();

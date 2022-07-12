@@ -5,38 +5,35 @@
  */
 package so.location;
 
+import db.DBBroker;
+import domain.AbstractDomainObject;
 import domain.Location;
 import java.util.ArrayList;
-import repository.db.impl.RepositoryLocation;
 import so.AbstractSO;
 
 /**
  *
  * @author Andrej
  */
-public class SOGetAllLocations extends AbstractSO{
-    private final RepositoryLocation storageLocation;
+public class SOGetAllLocations extends AbstractSO {
+
     private ArrayList<Location> list;
 
-    public SOGetAllLocations() {
-        storageLocation = new RepositoryLocation();
-    }
-    
-    
     @Override
-    protected void precondition(Object param) throws Exception {
-        
+    protected void precondition(AbstractDomainObject ado) throws Exception {
+       if (!(ado instanceof Location)) {
+            throw new Exception("The object that has been sent is not a instance of class Location!");
+        }
     }
 
     @Override
-    protected void executeOperation(Object param) throws Exception {
-        storageLocation.connect();
-        list = (ArrayList<Location>) storageLocation.getAll();
-       
+    protected void executeOperation(AbstractDomainObject ado) throws Exception {
+        ArrayList<AbstractDomainObject> locations = DBBroker.getInstance().select(ado);
+        list = (ArrayList<Location>) (ArrayList<?>) locations;
     }
 
     public ArrayList<Location> getList() {
         return list;
     }
-    
+
 }

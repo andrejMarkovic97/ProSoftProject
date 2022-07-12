@@ -7,6 +7,7 @@ package client.view;
 
 import client.controller.ClientController;
 import client.view.models.TableModelApartmentFeatures;
+import client.view.models.TableModelFeatureValues;
 import domain.ApartmentFeatures;
 import domain.FeatureValue;
 import domain.Listing;
@@ -33,9 +34,8 @@ public class FrmDetailsListing extends javax.swing.JDialog {
         fillLocations();
         txtPrice.setText(String.valueOf(l.getPrice()));
         txtDescription.setText(l.getAdditionalDescription());
-        TableModelApartmentFeatures model = new TableModelApartmentFeatures();
+        TableModelFeatureValues model = new TableModelFeatureValues();
         tblFeatureValues.setModel(model);
-        getFeatureValues();
         model.setListing(listing);
         fillTable();
         txtPrice.setEditable(false);
@@ -220,9 +220,11 @@ public class FrmDetailsListing extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Izaberite odgovarajucu karakteristiku", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        TableModelApartmentFeatures model = (TableModelApartmentFeatures) tblFeatureValues.getModel();
-        ApartmentFeatures af = model.getApartmentFeature(row);
-        FrmFeatureValues frm = new FrmFeatureValues(af, null, listing);
+        TableModelFeatureValues model =  (TableModelFeatureValues) tblFeatureValues.getModel();
+        FeatureValue fv = model.getFeatureValue(row);
+        fv.getAppFeatures().setFeatureValues(new ArrayList<>());
+        fv.getAppFeatures().getFeatureValues().add(fv);
+        FrmFeatureValues frm = new FrmFeatureValues(fv.getAppFeatures(), null, listing);
         frm.setFrmDetailsListing(this);
         frm.setVisible(true);
     }//GEN-LAST:event_btnInsertActionPerformed
@@ -244,7 +246,9 @@ public class FrmDetailsListing extends javax.swing.JDialog {
                         listing.setLocation(location);
                     }
                 }
+                TableModelFeatureValues model = (TableModelFeatureValues) tblFeatureValues.getModel();
                 listing.setAdditionalDescription(txtDescription.getText());
+                listing.setFeatureValues(model.getList());
                 ClientController.getInstance().updateListing(listing);
                 JOptionPane.showMessageDialog(this, "Uspješna izmjena oglasa");
             } catch (Exception ex) {
@@ -311,31 +315,18 @@ public class FrmDetailsListing extends javax.swing.JDialog {
         this.listing = listing;
     }
 
-    private void getFeatureValues() {
-        try {
-            ArrayList<FeatureValue> featureValues = ClientController.getInstance().getAllFeatureValues(listing.getListingID());
-
-            for (FeatureValue fv : featureValues) {
-                fv.setListing(listing);
-            }
-            listing.setFeatureValues(featureValues);
-        } catch (Exception ex) {
-            Logger.getLogger(FrmDetailsListing.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+   
 
     private void fillTable() {
-        TableModelApartmentFeatures model = (TableModelApartmentFeatures) tblFeatureValues.getModel();
-        try {
-            model.fillTableWithListingFeatureValueDetails();
-        } catch (Exception ex) {
-            Logger.getLogger(FrmDetailsListing.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    TableModelFeatureValues model = (TableModelFeatureValues) tblFeatureValues.getModel();
+    model.fillTable();
     }
 
-    void addApartmentFeature(ApartmentFeatures af) {
-        TableModelApartmentFeatures model = (TableModelApartmentFeatures) tblFeatureValues.getModel();
-        model.addApartmentFeature(af);
+    void setNewFeatureValue(FeatureValue newFv) {
+        TableModelFeatureValues model = (TableModelFeatureValues) tblFeatureValues.getModel();
+        model.UpdateFeatureValue(newFv);
     }
+
+  
 
 }

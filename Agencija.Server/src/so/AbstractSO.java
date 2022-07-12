@@ -5,7 +5,9 @@
  */
 package so;
 
-import repository.db.DBConnectionFactory;
+import db.DBBroker;
+import domain.AbstractDomainObject;
+
 
 /**
  *
@@ -13,10 +15,10 @@ import repository.db.DBConnectionFactory;
  */
 public abstract class AbstractSO {
 
-    public void execute(Object param) throws Exception {
+    public void execute(AbstractDomainObject ado) throws Exception {
         try {
-            precondition(param);
-            executeOperation(param);
+            precondition(ado);
+            executeOperation(ado);
             commitTransaction();
             System.out.println("Successful system operation");
         } catch (Exception exception) {
@@ -27,15 +29,17 @@ public abstract class AbstractSO {
         }
     }
 
-    protected abstract void precondition(Object param) throws Exception;
+    protected abstract void precondition(AbstractDomainObject ado) throws Exception;
 
-    protected abstract void executeOperation(Object param) throws Exception;
+    protected abstract void executeOperation(AbstractDomainObject ado) throws Exception;
 
     protected void commitTransaction() throws Exception {
-        
+        DBBroker.getInstance().getConnection().commit();
     }
 
     protected void rollbackTransaction() throws Exception {
+        DBBroker.getInstance().getConnection().rollback();
+
     }
 
 }

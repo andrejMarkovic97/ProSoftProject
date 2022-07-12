@@ -101,7 +101,7 @@ public class FeatureValue extends AbstractDomainObject implements Serializable{
 
     @Override
     public String primaryKeyValue() {
-        return " ListingID= "+listing.getListingID()+" AND FeatureID="+appFeatures.getFeatureID();
+        return " ListingID= "+listing.getListingID();
     }
 
     @Override

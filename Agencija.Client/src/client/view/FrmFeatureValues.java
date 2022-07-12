@@ -117,39 +117,49 @@ public class FrmFeatureValues extends javax.swing.JDialog {
             this.dispose();
         }
         if (frmDetailsListing != null) {
-            boolean exist = false;
-            if (af.getFeatureValues() != null) {
-                for (FeatureValue featureValue : af.getFeatureValues()) {
-                    if (featureValue.getAppFeatures().getFeatureID() == af.getFeatureID()
-                            && featureValue.getListing().getListingID() == listing.getListingID()) {
-                        featureValue.setValue(txtFeatureValue.getText());
-                        exist = true;
-                    }
+//            boolean exist = false;
+//            if (af.getFeatureValues() != null) {
+//                for (FeatureValue featureValue : af.getFeatureValues()) {
+//                    if (featureValue.getAppFeatures().getFeatureID() == af.getFeatureID()
+//                            && featureValue.getListing().getListingID() == listing.getListingID()) {
+//                        featureValue.setValue(txtFeatureValue.getText());
+//                        exist = true;
+//                    }
+//                }
+//                if (exist == false) {
+//                    FeatureValue fv = new FeatureValue();
+//                    fv.setAppFeatures(af);
+//                    fv.setListing(listing);
+//                    fv.setValue(txtFeatureValue.getText());
+//                    listing.getFeatureValues().add(fv);
+//                    af.getFeatureValues().add(fv);
+//
+//                }
+//            } else {
+//                af.setFeatureValues(new ArrayList<>());
+//                FeatureValue fv = new FeatureValue();
+//                fv.setAppFeatures(af);
+//                fv.setListing(listing);
+//                fv.setValue(txtFeatureValue.getText());
+//                listing.getFeatureValues().add(fv);
+//                af.getFeatureValues().add(fv);
+//            }
+//
+//            frmDetailsListing.addApartmentFeature(af);
+//            setFrmDetailsListing(null);
+            FeatureValue newFv =af.getFeatureValues().get(0);
+            newFv.setValue(txtFeatureValue.getText());
+            for (FeatureValue featureValue : listing.getFeatureValues()) {
+                if(featureValue.getAppFeatures().getFeatureID()==newFv.getAppFeatures().getFeatureID()
+                        && featureValue.getListing().getListingID()==newFv.getListing().getListingID()){
+                    featureValue=newFv;
                 }
-                if (exist == false) {
-                    FeatureValue fv = new FeatureValue();
-                    fv.setAppFeatures(af);
-                    fv.setListing(listing);
-                    fv.setValue(txtFeatureValue.getText());
-                    listing.getFeatureValues().add(fv);
-                    af.getFeatureValues().add(fv);
-
-                }
-            } else {
-                af.setFeatureValues(new ArrayList<>());
-                FeatureValue fv = new FeatureValue();
-                fv.setAppFeatures(af);
-                fv.setListing(listing);
-                fv.setValue(txtFeatureValue.getText());
-                listing.getFeatureValues().add(fv);
-                af.getFeatureValues().add(fv);
             }
-
-            frmDetailsListing.addApartmentFeature(af);
-            setFrmDetailsListing(null);
+            frmDetailsListing.setNewFeatureValue(newFv);
+            frmDetailsListing.setListing(listing);
             this.dispose();
             frmDetailsListing = null;
-            listing = null;
+            this.listing = null;
 
         }
     }//GEN-LAST:event_btnSubmitActionPerformed

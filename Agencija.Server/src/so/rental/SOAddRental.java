@@ -5,60 +5,40 @@
  */
 package so.rental;
 
-import domain.Listing;
+import db.DBBroker;
+import domain.AbstractDomainObject;
 import domain.Rental;
 import java.util.ArrayList;
-import repository.db.impl.RepositoryRental;
 import so.AbstractSO;
 
 /**
  *
  * @author Andrej
  */
-public class SOAddRental extends AbstractSO{
-    private final RepositoryRental storageRental;
+public class SOAddRental extends AbstractSO {
 
-    public SOAddRental() {
-        storageRental=new RepositoryRental();
-    }
-    
-    
-  protected void precondition(Object param) throws Exception {
-        if (param == null || !(param instanceof Rental)) {
+    protected void precondition(AbstractDomainObject ado) throws Exception {
+        if (ado == null || !(ado instanceof Rental)) {
             throw new Exception("Invalid parametar");
         }
-        Rental r = (Rental) param;
-        if(r.getEmployee()==null || r.getListing()==null || r.getRentingDate()==null){
+        Rental r = (Rental) ado;
+        if (r.getEmployee() == null || r.getListing() == null || r.getRentingDate() == null) {
             throw new Exception("Empty parameters");
         }
-        ArrayList<Rental> rentals = (ArrayList<Rental>) storageRental.getAll();
-       for (Rental rental : rentals) {
-          if(r.getEmployee().getEmployeeID()==rental.getEmployee().getEmployeeID() &&
-                  r.getListing().getListingID()==rental.getListing().getListingID()
-                  && r.getRentingDate()==rental.getRentingDate()){
-              throw new Exception("Rental already exists!");
-          }
-      }
+
+        ArrayList<Rental> rentals = (ArrayList<Rental>) (ArrayList<?>) DBBroker.getInstance().select(ado);
+        for (Rental rental : rentals) {
+            if (rental.getEmployee().getEmployeeID() == r.getEmployee().getEmployeeID()
+                    && rental.getListing().getListingID() == r.getListing().getListingID()
+                    && rental.getRentingDate().equals(r.getRentingDate())) {
+                throw new Exception("Rental already exists!");
+            }
+        }
     }
 
     @Override
-    protected void executeOperation(Object param) throws Exception {
-        Rental r = (Rental) param;
-       storageRental.connect();
-       storageRental.add(r);
-
+    protected void executeOperation(AbstractDomainObject ado) throws Exception {
+        DBBroker.getInstance().insert(ado);
     }
 
-    @Override
-    protected void commitTransaction() throws Exception {
-        storageRental.commit();
-    }
-
-    @Override
-    protected void rollbackTransaction() throws Exception {
-        storageRental.rollback();
-
-    }
-
-    
 }
